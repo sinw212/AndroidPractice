@@ -1,8 +1,9 @@
-package com.example.todoapp
+package com.example.todoapp.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.todoapp.data.TodoItem
 import com.example.todoapp.databinding.ItemTodoBinding
 
 class TodoAdapter(var todoItems: ArrayList<TodoItem>) :
