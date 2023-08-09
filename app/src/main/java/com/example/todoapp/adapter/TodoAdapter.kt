@@ -6,13 +6,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.todoapp.data.TodoItem
 import com.example.todoapp.databinding.ItemTodoBinding
 
-class TodoAdapter(var todoItems: ArrayList<TodoItem>) :
+class TodoAdapter(var todoItems: MutableList<TodoItem>) :
     RecyclerView.Adapter<TodoAdapter.TodoItemViewHolder>() {
 
     inner class TodoItemViewHolder(private val binding: ItemTodoBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(position: Int) {
-            binding.todoTextView.text = "todo${position}"
+        fun bind(item : TodoItem) {
+            binding.todoTextView.text = item.content
         }
     }
 
@@ -27,10 +27,10 @@ class TodoAdapter(var todoItems: ArrayList<TodoItem>) :
     }
 
     override fun onBindViewHolder(holder: TodoItemViewHolder, position: Int) {
-        holder.bind(position)
+        holder.bind(todoItems[position])
     }
 
     override fun getItemCount(): Int {
-        return 15
+        return todoItems.size
     }
 }
