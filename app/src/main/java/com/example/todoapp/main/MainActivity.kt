@@ -1,34 +1,42 @@
-package com.example.todoapp
+package com.example.todoapp.main
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.example.todoapp.adapter.ViewPager2Adapter
 import com.example.todoapp.databinding.ActivityMainBinding
 import com.google.android.material.tabs.TabLayoutMediator
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    val tabList = listOf("Todo", "Bookmark")
+    private val viewPager2Adapter by lazy {
+        MainViewPagerAdapter(this@MainActivity)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        initView()
+    }
+
+    private fun initView() = with(binding) {
         // Toolbar Init
-        setSupportActionBar(binding.toolBar)
+        setSupportActionBar(toolBar)
         supportActionBar?.setDisplayShowTitleEnabled(false) //true로 설정 시 기본 옵션(뒤로가기 버튼) 활성화
-        binding.toolBar.title = "Camp"
+        toolBar.title = "Camp"
 
         // ViewPager2Adapter Init
-        binding.viewPager.adapter = ViewPager2Adapter(this).apply {
-            addFragment(TodoFragment())
-            addFragment(BookmarkFragment())
-        }
+        viewPager.adapter = viewPager2Adapter
 
-        // TabLayout - ViewPager 연결
-        TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, pos ->
-            tab.text = tabList[pos]
+        //TabLayout - ViewPager2
+        TabLayoutMediator(tabLayout, viewPager) { tab, pos ->
+            tab.text = viewPager2Adapter.getTitle(pos)
         }.attach()
+
+        //Floating Button Click Listener
+        floatingBtn.setOnClickListener {
+
+        }
     }
+
 }
