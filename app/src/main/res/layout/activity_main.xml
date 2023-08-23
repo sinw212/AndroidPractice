@@ -42,6 +42,7 @@
         android:layout_margin="24dp"
         android:contentDescription="Floating Button"
         android:src="@drawable/ic_add"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
