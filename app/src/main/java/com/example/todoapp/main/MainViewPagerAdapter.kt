@@ -15,6 +15,10 @@ class MainViewPagerAdapter(fragmentActivity: FragmentActivity) :
         fragments.add(MainTabs(BookmarkFragment(), "Bookmark"))
     }
 
+    fun getFragment(index: Int): Fragment {
+        return fragments[index].fragment
+    }
+
     fun getTitle(position: Int): String {
         return fragments[position].title
     }

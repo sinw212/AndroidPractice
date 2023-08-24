@@ -1,21 +1,25 @@
 package com.example.todoapp.main
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.viewpager2.widget.ViewPager2
 import com.example.todoapp.databinding.ActivityMainBinding
+import com.example.todoapp.todo.TodoActivity
+import com.example.todoapp.todo.TodoFragment
 import com.google.android.material.tabs.TabLayoutMediator
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+    private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
     private val viewPager2Adapter by lazy {
         MainViewPagerAdapter(this@MainActivity)
     }
     private val pageChangeCallback = object: ViewPager2.OnPageChangeCallback() {
         override fun onPageSelected(position: Int) {
             super.onPageSelected(position)
-            Log.d("진입", position.toString())
             when(position) {
                 0 -> binding.floatingBtn.show()
                 1 -> binding.floatingBtn.hide()
@@ -47,15 +51,23 @@ class MainActivity : AppCompatActivity() {
 
         viewPager.registerOnPageChangeCallback(pageChangeCallback)
 
+        activityResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if(it.resultCode == RESULT_OK) {
+                val txtTitle = it.data?.getStringExtra("title") ?: " "
+                val txtContent = it.data?.getStringExtra("content") ?: " "
+                val todoFragment = viewPager2Adapter.getFragment(0) as TodoFragment
+                todoFragment.updateList(txtTitle, txtContent)
+            }
+        }
+
         //Floating Button Click Listener
         floatingBtn.setOnClickListener {
-
+            activityResultLauncher.launch(Intent(this@MainActivity, TodoActivity::class.java))
         }
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        Log.d("진입", "onDestory()")
         binding.viewPager.unregisterOnPageChangeCallback(pageChangeCallback)
     }
 }

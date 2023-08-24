@@ -25,7 +25,8 @@ class TodoListAdapter: RecyclerView.Adapter<TodoListAdapter.ViewHolder>() {
 
     inner class ViewHolder(private val binding: ItemTodoBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item : TodoModel) = with(binding) {
-            todoTextView.text = item.content
+            txtTodoTitle.text = item.title
+            txtTodoContent.text = item.content
         }
     }
 

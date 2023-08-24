@@ -35,6 +35,10 @@ class TodoFragment : Fragment() {
         todoList.adapter = todoListAdapter
     }
 
+    fun updateList(txtTitle: String, txtContent: String) {
+        todoListAdapter.addItems(arrayListOf(TodoModel(todoListAdapter.itemCount, txtTitle, txtContent)))
+    }
+
     override fun onDestroyView() {
         _binding = null // 구글 권장 - 메모리 누수 방지
         super.onDestroyView()
