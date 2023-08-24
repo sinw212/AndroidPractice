@@ -1,5 +1,7 @@
 package com.example.todoapp.main
 
+import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -12,11 +14,21 @@ import com.example.todoapp.todo.TodoFragment
 import com.google.android.material.tabs.TabLayoutMediator
 
 class MainActivity : AppCompatActivity() {
+//    companion object {
+//        fun newIntent(context: Context, intentData: String, activity: Class<*>): Intent {
+//            val intent = Intent(context, activity)
+//            intent.putExtra("dataName", intentData)
+//            return intent
+//        }
+//    }
+
     private lateinit var binding: ActivityMainBinding
     private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
+
     private val viewPager2Adapter by lazy {
         MainViewPagerAdapter(this@MainActivity)
     }
+
     private val pageChangeCallback = object: ViewPager2.OnPageChangeCallback() {
         override fun onPageSelected(position: Int) {
             super.onPageSelected(position)
@@ -62,6 +74,7 @@ class MainActivity : AppCompatActivity() {
 
         //Floating Button Click Listener
         floatingBtn.setOnClickListener {
+            val s = TodoActivity::class.java
             activityResultLauncher.launch(Intent(this@MainActivity, TodoActivity::class.java))
         }
     }
