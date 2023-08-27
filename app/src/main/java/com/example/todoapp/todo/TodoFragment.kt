@@ -43,7 +43,7 @@ class TodoFragment : Fragment() {
     }
 
     fun updateList(txtTitle: String, txtContent: String) {
-        todoListAdapter.addItems(arrayListOf(TodoModel(todoListAdapter.itemCount, txtTitle, txtContent)))
+        todoListAdapter.addItems(TodoModel(todoListAdapter.itemCount, txtTitle, txtContent))
     }
 
     override fun onDestroyView() {

@@ -30,8 +30,8 @@ class TodoListAdapter: RecyclerView.Adapter<TodoListAdapter.ViewHolder>() {
         }
     }
 
-    fun addItems(items: List<TodoModel>) {
-        todoList.addAll(items)
+    fun addItems(item: TodoModel) {
+        todoList.add(item)
         notifyDataSetChanged()
     }
 }
