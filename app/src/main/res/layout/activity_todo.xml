@@ -37,11 +37,10 @@
         app:layout_constraintTop_toBottomOf="@id/edt_title" />
 
     <Button
-        android:id="@+id/btn_add"
+        android:id="@+id/btn_submit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:text="@string/todo_add_btn"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

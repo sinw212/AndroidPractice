@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             val todoFragment = viewPager2Adapter.getFragment(0) as? TodoFragment
-            todoFragment?.setTodoContent(todoModel)
+            todoFragment?.addTodoContent(todoModel)
         }
     }
 
@@ -68,7 +68,7 @@ class MainActivity : AppCompatActivity() {
 
         //Floating Button Click Listener
         floatingBtn.setOnClickListener {
-            addTodoLauncher.launch(TodoContentActivity.newIntent(this@MainActivity))
+            addTodoLauncher.launch(TodoContentActivity.newIntentForAdd(this@MainActivity))
         }
     }
 }
