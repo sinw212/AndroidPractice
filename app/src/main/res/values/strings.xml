@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">TodoApp</string>
+
+    <string name="main_toolbar">Camp</string>
+    <string name="main_tab_todo_title">Todo</string>
+    <string name="main_tab_bookmark_title">Bookmark</string>
+
+    <string name="todo_toolbar">할일</string>
+    <string name="todo_add_title_hint">제목</string>
+    <string name="todo_add_content_hint">내용</string>
+    <string name="todo_add_btn">등록</string>
 </resources>

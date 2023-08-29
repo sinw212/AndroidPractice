@@ -1,13 +1,20 @@
-package com.example.todoapp.todo
+package com.example.todoapp.todo.add
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import com.example.todoapp.R
 import com.example.todoapp.databinding.ActivityTodoBinding
-import com.example.todoapp.main.MainActivity
+import com.example.todoapp.todo.home.TodoModel
 
-class TodoActivity : AppCompatActivity() {
+class TodoContentActivity : AppCompatActivity() {
+    companion object {
+        const val EXTRA_MODEL = "extra_model"
+        fun newIntent(context: Context): Intent = Intent(context, TodoContentActivity::class.java)
+    }
+
     private lateinit var binding: ActivityTodoBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,12 +29,11 @@ class TodoActivity : AppCompatActivity() {
         setSupportActionBar(toolBar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowTitleEnabled(false)
-        toolBar.title = "할일"
+        toolBar.title = getString(R.string.todo_toolbar)
 
         btnAdd.setOnClickListener {
-            val todoIntent = Intent(this@TodoActivity, MainActivity::class.java).apply {
-                putExtra("title", edtTitle.text.toString())
-                putExtra("content", edtContent.text.toString())
+            val todoIntent = Intent().apply {
+                putExtra(EXTRA_MODEL, TodoModel(edtTitle.text.toString(), edtContent.text.toString()))
             }
             setResult(RESULT_OK, todoIntent)
             if(!isFinishing) {

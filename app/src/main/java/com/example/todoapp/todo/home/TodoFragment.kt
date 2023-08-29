@@ -1,23 +1,13 @@
-package com.example.todoapp.todo
+package com.example.todoapp.todo.home
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import com.example.todoapp.databinding.FragmentTodoBinding
 
 class TodoFragment : Fragment() {
-//    companion object {
-//        fun newInstance(id: String): TodoFragment {
-//            val fragment = TodoFragment()
-//            fragment.arguments = Bundle().apply {
-//                bundleOf("id" to id)
-//            }
-//            return TodoFragment()
-//        }
-//    }
 
     private var _binding: FragmentTodoBinding? = null
     private val binding get() = _binding!!
@@ -42,8 +32,8 @@ class TodoFragment : Fragment() {
         todoList.adapter = todoListAdapter
     }
 
-    fun updateList(txtTitle: String, txtContent: String) {
-        todoListAdapter.addItems(TodoModel(todoListAdapter.itemCount, txtTitle, txtContent))
+    fun setTodoContent(todoModel: TodoModel?) {
+        todoListAdapter.addItem(todoModel)
     }
 
     override fun onDestroyView() {

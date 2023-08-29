@@ -23,7 +23,7 @@
         </activity>
 
         <activity
-            android:name=".todo.TodoActivity"
+            android:name=".todo.add.TodoContentActivity"
             android:exported="false" />
     </application>
 

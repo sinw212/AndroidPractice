@@ -1,4 +1,4 @@
-package com.example.todoapp.todo
+package com.example.todoapp.todo.home
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -30,8 +30,11 @@ class TodoListAdapter: RecyclerView.Adapter<TodoListAdapter.ViewHolder>() {
         }
     }
 
-    fun addItems(item: TodoModel) {
-        todoList.add(item)
-        notifyDataSetChanged()
+    fun addItem(todoModel: TodoModel?) {
+        if(todoModel == null) {
+            return
+        }
+        todoList.add(todoModel)
+        notifyItemChanged(todoList.size - 1)
     }
 }
