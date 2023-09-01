@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import com.example.todoapp.databinding.FragmentTodoBinding
 import com.example.todoapp.todo.add.TodoContentActivity
+import com.example.todoapp.todo.add.TodoContentType
 
 class TodoFragment : Fragment() {
 
@@ -23,12 +24,22 @@ class TodoFragment : Fragment() {
     private var updatePosition = 0
     private val editTodoLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if(result.resultCode == Activity.RESULT_OK) {
+            val todoContentType = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                result.data?.getSerializableExtra(TodoContentActivity.EXTRA_TODO_CONTENT_TYPE, TodoContentType::class.java)
+            } else {
+                result.data?.getSerializableExtra(TodoContentActivity.EXTRA_TODO_CONTENT_TYPE)
+            }
+
             val todoModel = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 result.data?.getParcelableExtra(TodoContentActivity.EXTRA_MODEL, TodoModel::class.java)
             } else {
                 result.data?.getParcelableExtra(TodoContentActivity.EXTRA_MODEL)
             }
-            updateTodoContent(todoModel)
+
+            when(todoContentType) {
+                TodoContentType.EDIT -> updateTodoContent(todoModel)
+                TodoContentType.DELETE -> deleteTodoContent(todoModel)
+            }
         }
     }
 
@@ -51,7 +62,7 @@ class TodoFragment : Fragment() {
             override fun onClick(view: View, position: Int) {
                 if (activity == null) return
                 updatePosition = position
-                editTodoLauncher.launch(TodoContentActivity.newIntentForEdit(activity, todoListAdapter.todoList[position]))
+                editTodoLauncher.launch(TodoContentActivity.newIntentForEdit(requireActivity(), todoListAdapter.todoList[position]))
             }
         }
     }
@@ -62,6 +73,10 @@ class TodoFragment : Fragment() {
 
     private fun updateTodoContent(todoModel: TodoModel?) {
         todoListAdapter.updateItem(todoModel, updatePosition)
+    }
+
+    private fun deleteTodoContent(todoModel: TodoModel?) {
+        todoListAdapter.deleteItem(todoModel, updatePosition)
     }
 
     override fun onDestroyView() {

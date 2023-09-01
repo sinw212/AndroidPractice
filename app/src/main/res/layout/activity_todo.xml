@@ -37,6 +37,18 @@
         app:layout_constraintTop_toBottomOf="@id/edt_title" />
 
     <Button
+        android:id="@+id/btn_delete"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="5dp"
+        android:text="@string/todo_btn_delete"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@id/btn_submit"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
         android:id="@+id/btn_submit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

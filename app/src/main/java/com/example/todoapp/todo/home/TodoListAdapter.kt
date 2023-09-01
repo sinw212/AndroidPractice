@@ -50,4 +50,10 @@ class TodoListAdapter: RecyclerView.Adapter<TodoListAdapter.ViewHolder>() {
         todoList[position] = todoModel.copy(title = todoModel.title, content=todoModel.content)
         notifyItemChanged(position)
     }
+
+    fun deleteItem(todoModel: TodoModel?, position: Int) {
+        if(todoModel == null) return
+        todoList.remove(todoModel)
+        notifyItemRemoved(position)
+    }
 }
