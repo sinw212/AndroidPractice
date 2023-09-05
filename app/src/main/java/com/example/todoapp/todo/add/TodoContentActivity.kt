@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.os.Parcelable
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AlertDialog
@@ -12,21 +14,19 @@ import androidx.fragment.app.FragmentActivity
 import com.example.todoapp.R
 import com.example.todoapp.databinding.ActivityTodoBinding
 import com.example.todoapp.todo.home.TodoModel
-import java.io.Serializable
 
 class TodoContentActivity : AppCompatActivity() {
     companion object {
         const val EXTRA_MODEL = "extra_model"
-        const val EXTRA_TODO_CONTENT_TYPE = "extra_todo_content_type"
         fun newIntentForAdd(context: Context): Intent =
             Intent(context, TodoContentActivity::class.java).apply {
-                putExtra(EXTRA_TODO_CONTENT_TYPE, TodoContentType.ADD)
+                putExtra(TodoContentType.EXTRA_TODO_CONTENT_TYPE, TodoContentType.ADD as Parcelable)
             }
 
-        fun newIntentForEdit(requireActivity: FragmentActivity, todoModel: TodoModel): Intent =
-            Intent(requireActivity, TodoContentActivity::class.java).apply {
+        fun newIntentForEdit(context: Context, todoModel: TodoModel): Intent =
+            Intent(context, TodoContentActivity::class.java).apply {
                 putExtra(EXTRA_MODEL, todoModel)
-                putExtra(EXTRA_TODO_CONTENT_TYPE, TodoContentType.EDIT)
+                putExtra(TodoContentType.EXTRA_TODO_CONTENT_TYPE, TodoContentType.EDIT  as Parcelable)
             }
     }
 
@@ -47,30 +47,26 @@ class TodoContentActivity : AppCompatActivity() {
         toolBar.title = getString(R.string.todo_toolbar)
 
         val todoContentType = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            intent.getSerializableExtra(EXTRA_TODO_CONTENT_TYPE, TodoContentType::class.java)
+            intent.getParcelableExtra(TodoContentType.EXTRA_TODO_CONTENT_TYPE, TodoContentType::class.java)
         } else {
-            intent.getSerializableExtra(EXTRA_TODO_CONTENT_TYPE)
+            intent.getParcelableExtra(TodoContentType.EXTRA_TODO_CONTENT_TYPE)
         }
 
-        when (todoContentType) {
-            TodoContentType.ADD -> {
-                btnSubmit.text = getString(R.string.todo_submit_btn_add)
+        if(todoContentType == TodoContentType.ADD) {
+            btnSubmit.text = getString(R.string.todo_submit_btn_add)
+        } else if(todoContentType == TodoContentType.EDIT){
+            btnSubmit.text = getString(R.string.todo_submit_btn_edit)
+            btnDelete.visibility = View.VISIBLE
+            val editTodoModel = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                intent.getParcelableExtra(
+                    EXTRA_MODEL,
+                    TodoModel::class.java
+                )
+            } else {
+                intent.getParcelableExtra(TodoContentActivity.EXTRA_MODEL)
             }
-
-            TodoContentType.EDIT -> {
-                btnSubmit.text = getString(R.string.todo_submit_btn_edit)
-                btnDelete.visibility = View.VISIBLE
-                val editTodoModel = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    intent.getParcelableExtra(
-                        TodoContentActivity.EXTRA_MODEL,
-                        TodoModel::class.java
-                    )
-                } else {
-                    intent.getParcelableExtra(TodoContentActivity.EXTRA_MODEL)
-                }
-                edtTitle.setText(editTodoModel?.title)
-                edtContent.setText(editTodoModel?.content)
-            }
+            edtTitle.setText(editTodoModel?.title)
+            edtContent.setText(editTodoModel?.content)
         }
 
         btnDelete.setOnClickListener {
@@ -90,9 +86,9 @@ class TodoContentActivity : AppCompatActivity() {
         }
     }
 
-    private fun finishTodoResult(todoContentType: Serializable?) {
+    private fun finishTodoResult(todoContentType: TodoContentType?) {
         val todoIntent = Intent().apply {
-            putExtra(EXTRA_TODO_CONTENT_TYPE, todoContentType)
+            putExtra(TodoContentType.EXTRA_TODO_CONTENT_TYPE, todoContentType as Parcelable)
             putExtra(
                 EXTRA_MODEL,
                 TodoModel(binding.edtTitle.text.toString(), binding.edtContent.text.toString())

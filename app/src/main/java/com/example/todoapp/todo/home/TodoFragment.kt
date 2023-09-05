@@ -25,9 +25,9 @@ class TodoFragment : Fragment() {
     private val editTodoLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if(result.resultCode == Activity.RESULT_OK) {
             val todoContentType = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                result.data?.getSerializableExtra(TodoContentActivity.EXTRA_TODO_CONTENT_TYPE, TodoContentType::class.java)
+                result.data?.getParcelableExtra(TodoContentType.EXTRA_TODO_CONTENT_TYPE, TodoContentType::class.java)
             } else {
-                result.data?.getSerializableExtra(TodoContentActivity.EXTRA_TODO_CONTENT_TYPE)
+                result.data?.getParcelableExtra(TodoContentType.EXTRA_TODO_CONTENT_TYPE)
             }
 
             val todoModel = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -36,9 +36,10 @@ class TodoFragment : Fragment() {
                 result.data?.getParcelableExtra(TodoContentActivity.EXTRA_MODEL)
             }
 
-            when(todoContentType) {
-                TodoContentType.EDIT -> updateTodoContent(todoModel)
-                TodoContentType.DELETE -> deleteTodoContent(todoModel)
+            if(todoContentType == TodoContentType.EDIT) {
+                updateTodoContent(todoModel)
+            } else {
+                deleteTodoContent(todoModel)
             }
         }
     }
@@ -62,7 +63,7 @@ class TodoFragment : Fragment() {
             override fun onClick(view: View, position: Int) {
                 if (activity == null) return
                 updatePosition = position
-                editTodoLauncher.launch(TodoContentActivity.newIntentForEdit(requireActivity(), todoListAdapter.todoList[position]))
+                editTodoLauncher.launch(TodoContentActivity.newIntentForEdit(requireContext(), todoListAdapter.todoList[position]))
             }
         }
     }
