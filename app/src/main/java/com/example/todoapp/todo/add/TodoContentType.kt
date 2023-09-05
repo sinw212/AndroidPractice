@@ -1,10 +1,6 @@
 package com.example.todoapp.todo.add
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
-
-@Parcelize
-enum class TodoContentType: Parcelable {
+enum class TodoContentType {
     ADD, EDIT, DELETE;
 
     companion object {

@@ -21,14 +21,14 @@ class TodoContentActivity : AppCompatActivity() {
         const val EXTRA_POSITION = "extra_position"
         fun newIntentForAdd(context: Context): Intent =
             Intent(context, TodoContentActivity::class.java).apply {
-                putExtra(TodoContentType.EXTRA_TODO_CONTENT_TYPE, TodoContentType.ADD as Parcelable)
+                putExtra(TodoContentType.EXTRA_TODO_CONTENT_TYPE, TodoContentType.ADD.name)
             }
 
         fun newIntentForEdit(context: Context, position: Int, todoModel: TodoModel): Intent =
             Intent(context, TodoContentActivity::class.java).apply {
                 putExtra(EXTRA_MODEL, todoModel)
                 putExtra(EXTRA_POSITION, position)
-                putExtra(TodoContentType.EXTRA_TODO_CONTENT_TYPE, TodoContentType.EDIT  as Parcelable)
+                putExtra(TodoContentType.EXTRA_TODO_CONTENT_TYPE, TodoContentType.EDIT.name)
             }
     }
 
@@ -52,15 +52,11 @@ class TodoContentActivity : AppCompatActivity() {
         supportActionBar?.setDisplayShowTitleEnabled(false)
         toolBar.title = getString(R.string.todo_toolbar)
 
-        val todoContentType = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            intent.getParcelableExtra(TodoContentType.EXTRA_TODO_CONTENT_TYPE, TodoContentType::class.java)
-        } else {
-            intent.getParcelableExtra(TodoContentType.EXTRA_TODO_CONTENT_TYPE)
-        }
+        val todoContentType = intent.getStringExtra(TodoContentType.EXTRA_TODO_CONTENT_TYPE)
 
-        if(todoContentType == TodoContentType.ADD) {
+        if(todoContentType == TodoContentType.ADD.name) {
             btnSubmit.text = getString(R.string.todo_submit_btn_add)
-        } else if(todoContentType == TodoContentType.EDIT){
+        } else {
             btnSubmit.text = getString(R.string.todo_submit_btn_edit)
             btnDelete.visibility = View.VISIBLE
             val editTodoModel = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -69,7 +65,7 @@ class TodoContentActivity : AppCompatActivity() {
                     TodoModel::class.java
                 )
             } else {
-                intent.getParcelableExtra(TodoContentActivity.EXTRA_MODEL)
+                intent.getParcelableExtra(EXTRA_MODEL)
             }
             edtTitle.setText(editTodoModel?.title)
             edtContent.setText(editTodoModel?.content)
@@ -79,7 +75,7 @@ class TodoContentActivity : AppCompatActivity() {
             val builder = AlertDialog.Builder(this@TodoContentActivity)
             builder.setMessage(getString(R.string.todo_dialog_message))
                 .setPositiveButton(getString(R.string.todo_dialog_positive)) { _, _ ->
-                    finishTodoResult(TodoContentType.DELETE)
+                    finishTodoResult(TodoContentType.DELETE.name)
                 }
                 .setNegativeButton(getString(R.string.todo_dialog_negative)) { _, _ ->
                     builder.create().dismiss()
@@ -92,9 +88,9 @@ class TodoContentActivity : AppCompatActivity() {
         }
     }
 
-    private fun finishTodoResult(todoContentType: TodoContentType?) {
+    private fun finishTodoResult(todoContentType: String?) {
         val todoIntent = Intent().apply {
-            putExtra(TodoContentType.EXTRA_TODO_CONTENT_TYPE, todoContentType as Parcelable)
+            putExtra(TodoContentType.EXTRA_TODO_CONTENT_TYPE, todoContentType)
             putExtra(EXTRA_POSITION, position)
             putExtra(
                 EXTRA_MODEL,

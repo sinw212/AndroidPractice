@@ -23,11 +23,7 @@ class TodoFragment : Fragment() {
 
     private val editTodoLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if(result.resultCode == Activity.RESULT_OK) {
-            val todoContentType = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                result.data?.getParcelableExtra(TodoContentType.EXTRA_TODO_CONTENT_TYPE, TodoContentType::class.java)
-            } else {
-                result.data?.getParcelableExtra(TodoContentType.EXTRA_TODO_CONTENT_TYPE)
-            }
+            val todoContentType = result.data?.getStringExtra(TodoContentType.EXTRA_TODO_CONTENT_TYPE)
 
             val position = result.data?.getIntExtra(TodoContentActivity.EXTRA_POSITION, -1)
 
@@ -37,7 +33,7 @@ class TodoFragment : Fragment() {
                 result.data?.getParcelableExtra(TodoContentActivity.EXTRA_MODEL)
             }
 
-            if(todoContentType == TodoContentType.EDIT) {
+            if(todoContentType == TodoContentType.EDIT.name) {
                 updateTodoContent(todoModel, position)
             } else {
                 deleteTodoContent(position)
