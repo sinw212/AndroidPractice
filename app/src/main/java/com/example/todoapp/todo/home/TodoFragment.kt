@@ -21,7 +21,6 @@ class TodoFragment : Fragment() {
         TodoListAdapter()
     }
 
-    private var updatePosition = 0
     private val editTodoLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if(result.resultCode == Activity.RESULT_OK) {
             val todoContentType = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -30,6 +29,8 @@ class TodoFragment : Fragment() {
                 result.data?.getParcelableExtra(TodoContentType.EXTRA_TODO_CONTENT_TYPE)
             }
 
+            val position = result.data?.getIntExtra(TodoContentActivity.EXTRA_POSITION, -1)
+
             val todoModel = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 result.data?.getParcelableExtra(TodoContentActivity.EXTRA_MODEL, TodoModel::class.java)
             } else {
@@ -37,9 +38,9 @@ class TodoFragment : Fragment() {
             }
 
             if(todoContentType == TodoContentType.EDIT) {
-                updateTodoContent(todoModel)
+                updateTodoContent(todoModel, position)
             } else {
-                deleteTodoContent(todoModel)
+                deleteTodoContent(position)
             }
         }
     }
@@ -62,8 +63,7 @@ class TodoFragment : Fragment() {
         todoListAdapter.itemClick = object: TodoListAdapter.ItemClick {
             override fun onClick(view: View, position: Int) {
                 if (activity == null) return
-                updatePosition = position
-                editTodoLauncher.launch(TodoContentActivity.newIntentForEdit(requireContext(), todoListAdapter.todoList[position]))
+                editTodoLauncher.launch(TodoContentActivity.newIntentForEdit(requireContext(), position, todoListAdapter.todoList[position]))
             }
         }
     }
@@ -72,12 +72,12 @@ class TodoFragment : Fragment() {
         todoListAdapter.addItem(todoModel)
     }
 
-    private fun updateTodoContent(todoModel: TodoModel?) {
-        todoListAdapter.updateItem(todoModel, updatePosition)
+    private fun updateTodoContent(todoModel: TodoModel?, position: Int?) {
+        todoListAdapter.updateItem(todoModel, position)
     }
 
-    private fun deleteTodoContent(todoModel: TodoModel?) {
-        todoListAdapter.deleteItem(todoModel, updatePosition)
+    private fun deleteTodoContent(position: Int?) {
+        todoListAdapter.deleteItem(position)
     }
 
     override fun onDestroyView() {

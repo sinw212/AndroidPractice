@@ -18,19 +18,25 @@ import com.example.todoapp.todo.home.TodoModel
 class TodoContentActivity : AppCompatActivity() {
     companion object {
         const val EXTRA_MODEL = "extra_model"
+        const val EXTRA_POSITION = "extra_position"
         fun newIntentForAdd(context: Context): Intent =
             Intent(context, TodoContentActivity::class.java).apply {
                 putExtra(TodoContentType.EXTRA_TODO_CONTENT_TYPE, TodoContentType.ADD as Parcelable)
             }
 
-        fun newIntentForEdit(context: Context, todoModel: TodoModel): Intent =
+        fun newIntentForEdit(context: Context, position: Int, todoModel: TodoModel): Intent =
             Intent(context, TodoContentActivity::class.java).apply {
                 putExtra(EXTRA_MODEL, todoModel)
+                putExtra(EXTRA_POSITION, position)
                 putExtra(TodoContentType.EXTRA_TODO_CONTENT_TYPE, TodoContentType.EDIT  as Parcelable)
             }
     }
 
     private lateinit var binding: ActivityTodoBinding
+
+    private val position by lazy {
+        intent.getIntExtra(EXTRA_POSITION, -1)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -89,6 +95,7 @@ class TodoContentActivity : AppCompatActivity() {
     private fun finishTodoResult(todoContentType: TodoContentType?) {
         val todoIntent = Intent().apply {
             putExtra(TodoContentType.EXTRA_TODO_CONTENT_TYPE, todoContentType as Parcelable)
+            putExtra(EXTRA_POSITION, position)
             putExtra(
                 EXTRA_MODEL,
                 TodoModel(binding.edtTitle.text.toString(), binding.edtContent.text.toString())
