@@ -6,13 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todoapp.databinding.ItemTodoBinding
 
-class TodoListAdapter : RecyclerView.Adapter<TodoListAdapter.ViewHolder>() {
-
-    interface ItemClick {
-        fun onClick(view: View, position: Int)
-    }
-
-    var itemClick: ItemClick? = null
+class TodoListAdapter(val itemClickListener: (Int) -> Unit) : RecyclerView.Adapter<TodoListAdapter.ViewHolder>() {
     val todoList = ArrayList<TodoModel>()
 
     override fun getItemCount(): Int {
@@ -32,8 +26,11 @@ class TodoListAdapter : RecyclerView.Adapter<TodoListAdapter.ViewHolder>() {
     inner class ViewHolder(private val binding: ItemTodoBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: TodoModel) = with(binding) {
-            itemView.setOnClickListener {
-                itemClick?.onClick(it, adapterPosition)
+            root.setOnClickListener {
+                val position = adapterPosition
+                if(position != RecyclerView.NO_POSITION) {
+                    itemClickListener(position)
+                }
             }
             txtTodoTitle.text = item.title
             txtTodoContent.text = item.content

@@ -17,9 +17,7 @@ class TodoFragment : Fragment() {
     private var _binding: FragmentTodoBinding? = null
     private val binding get() = _binding!!
 
-    private val todoListAdapter by lazy {
-        TodoListAdapter()
-    }
+    private lateinit var todoListAdapter: TodoListAdapter
 
     private val editTodoLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if(result.resultCode == Activity.RESULT_OK) {
@@ -54,14 +52,10 @@ class TodoFragment : Fragment() {
     }
 
     private fun initView() = with(binding) {
+        todoListAdapter = TodoListAdapter(itemClickListener = { position ->
+            editTodoLauncher.launch(TodoContentActivity.newIntentForEdit(requireContext(), position, todoListAdapter.todoList[position]))
+        })
         todoList.adapter = todoListAdapter
-
-        todoListAdapter.itemClick = object: TodoListAdapter.ItemClick {
-            override fun onClick(view: View, position: Int) {
-                if (activity == null) return
-                editTodoLauncher.launch(TodoContentActivity.newIntentForEdit(requireContext(), position, todoListAdapter.todoList[position]))
-            }
-        }
     }
 
     fun addTodoContent(todoModel: TodoModel?) {
