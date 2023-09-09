@@ -6,8 +6,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todoapp.databinding.ItemTodoBinding
 
-class TodoListAdapter(val itemClickListener: (Int) -> Unit) : RecyclerView.Adapter<TodoListAdapter.ViewHolder>() {
-    val todoList = ArrayList<TodoModel>()
+class TodoListAdapter(val itemClickListener: (Int, TodoModel) -> Unit) : RecyclerView.Adapter<TodoListAdapter.ViewHolder>() {
+    private val todoList = ArrayList<TodoModel>()
 
     override fun getItemCount(): Int {
         return todoList.size
@@ -15,7 +15,7 @@ class TodoListAdapter(val itemClickListener: (Int) -> Unit) : RecyclerView.Adapt
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
-            ItemTodoBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            ItemTodoBinding.inflate(LayoutInflater.from(parent.context), parent, false), itemClickListener
         )
     }
 
@@ -23,14 +23,11 @@ class TodoListAdapter(val itemClickListener: (Int) -> Unit) : RecyclerView.Adapt
         holder.bind(todoList[position])
     }
 
-    inner class ViewHolder(private val binding: ItemTodoBinding) :
+    inner class ViewHolder(private val binding: ItemTodoBinding, private val itemClickListener: (Int, TodoModel) -> Unit) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: TodoModel) = with(binding) {
             root.setOnClickListener {
-                val position = adapterPosition
-                if(position != RecyclerView.NO_POSITION) {
-                    itemClickListener(position)
-                }
+                itemClickListener(adapterPosition, item)
             }
             txtTodoTitle.text = item.title
             txtTodoContent.text = item.content
@@ -38,20 +35,22 @@ class TodoListAdapter(val itemClickListener: (Int) -> Unit) : RecyclerView.Adapt
     }
 
     fun addItem(todoModel: TodoModel?) {
-        if (todoModel == null) return
-        todoList.add(todoModel)
-        notifyItemChanged(todoList.size - 1)
+        todoModel?.let {
+            todoList.add(todoModel)
+            notifyItemChanged(todoList.size - 1)
+        }
     }
 
     fun updateItem(todoModel: TodoModel?, position: Int?) {
         if (todoModel == null || position == null) {
             return
         }
-        todoList[position] = todoModel.copy(title = todoModel.title, content = todoModel.content)
+//        todoList[position] = todoModel.copy(title = todoModel.title, content = todoModel.content)
+        todoList[position] = todoModel
         notifyItemChanged(position)
     }
 
-    fun deleteItem(position: Int?) {
+    fun removeItem(position: Int?) {
         if (position == null) return
         todoList.removeAt(position)
         notifyItemRemoved(position)

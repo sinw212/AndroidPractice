@@ -1,9 +1,13 @@
 package com.example.todoapp.todo.add
 
 enum class TodoContentType {
-    ADD, EDIT, DELETE;
+    ADD, EDIT, REMOVE;
 
     companion object {
-        const val EXTRA_TODO_CONTENT_TYPE = "extra_todo_content_type"
+        fun from(name: String?): TodoContentType? {
+            return TodoContentType.values().find {
+                it.name.uppercase() == name?.uppercase()
+            }
+        }
     }
 }
