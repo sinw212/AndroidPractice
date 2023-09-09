@@ -100,7 +100,7 @@ class TodoContentActivity : AppCompatActivity() {
             putExtra(EXTRA_POSITION, position)
             putExtra(
                 EXTRA_MODEL,
-                TodoModel(binding.edtTitle.text.toString(), binding.edtContent.text.toString())
+                TodoModel(binding.edtTitle.text.toString(), binding.edtContent.text.toString(), todoModel?.isSwitch ?: false)
             )
         }
         setResult(RESULT_OK, todoIntent)

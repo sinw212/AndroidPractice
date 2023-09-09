@@ -4,10 +4,15 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todoapp.databinding.ItemBookmarkBinding
+import com.example.todoapp.todo.home.TodoListManager
+import com.example.todoapp.todo.home.TodoModel
 
-class BookmarkListAdapter: RecyclerView.Adapter<BookmarkListAdapter.ViewHolder>() {
+class BookmarkListAdapter(
+    private val todoListManager: TodoListManager,
+    val switchClickListener: (TodoModel, Int) -> Unit
+) : RecyclerView.Adapter<BookmarkListAdapter.ViewHolder>() {
 
-    private val bookmarkList = ArrayList<BookmarkModel>()
+    private var bookmarkList = ArrayList<TodoModel>()
 
     override fun getItemCount(): Int {
         return bookmarkList.size
@@ -23,14 +28,28 @@ class BookmarkListAdapter: RecyclerView.Adapter<BookmarkListAdapter.ViewHolder>(
         holder.bind(bookmarkList[position])
     }
 
-    inner class ViewHolder(private val binding: ItemBookmarkBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item : BookmarkModel) = with(binding) {
-            bookmarkTextView.text = item.content
+    inner class ViewHolder(private val binding: ItemBookmarkBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind(item: TodoModel) = with(binding) {
+            txtBookmarkTitle.text = item.title
+            txtBookmarkContent.text = item.content
+            switchBookmark.isChecked = item.isSwitch
+            switchBookmark.setOnClickListener {
+                switchClickListener(item, adapterPosition)
+            }
         }
     }
 
-    fun addItems(items: List<BookmarkModel>) {
-        bookmarkList.addAll(items)
+    fun updateSwitch(todoModel: TodoModel?, position: Int?) {
+        if(todoModel == null || position == null) {
+            return
+        }
+        todoListManager.updateSwitch(todoModel, position)
+        notifyItemChanged(position)
+    }
+
+    fun updateBookmarkList() {
+        this.bookmarkList = todoListManager.bookmarkList
         notifyDataSetChanged()
     }
 }

@@ -13,7 +13,6 @@ import com.example.todoapp.todo.add.TodoContentActivity
 import com.example.todoapp.todo.add.TodoContentType
 
 class TodoFragment : Fragment() {
-
     private var _binding: FragmentTodoBinding? = null
     private val binding get() = _binding!!
 
@@ -37,10 +36,20 @@ class TodoFragment : Fragment() {
         }
     }
 
+    private val todoListManager by lazy {
+        TodoListManager()
+    }
+
     private val todoListAdapter by lazy {
-        TodoListAdapter(itemClickListener = { position, item ->
-            editTodoLauncher.launch(TodoContentActivity.newIntentForEdit(requireContext(), position, item))
-        })
+        TodoListAdapter(
+            todoListManager,
+            itemClickListener = { item, position ->
+                editTodoLauncher.launch(TodoContentActivity.newIntentForEdit(requireContext(), position, item))
+            },
+            switchClickListener = { item, position ->
+                updateTodoSwitch(item, position)
+            }
+        )
     }
 
     override fun onCreateView(
@@ -69,6 +78,10 @@ class TodoFragment : Fragment() {
 
     private fun removeTodoContent(position: Int?) {
         todoListAdapter.removeItem(position)
+    }
+
+    private fun updateTodoSwitch(todoModel: TodoModel?, position: Int?) {
+        todoListAdapter.updateSwitch(todoModel, position)
     }
 
     override fun onDestroyView() {

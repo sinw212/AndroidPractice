@@ -1,58 +1,75 @@
 package com.example.todoapp.todo.home
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todoapp.databinding.ItemTodoBinding
 
-class TodoListAdapter(val itemClickListener: (Int, TodoModel) -> Unit) : RecyclerView.Adapter<TodoListAdapter.ViewHolder>() {
-    private val todoList = ArrayList<TodoModel>()
+class TodoListAdapter(
+    private val todoListManager: TodoListManager,
+    val itemClickListener: (TodoModel, Int) -> Unit,
+    val switchClickListener: (TodoModel, Int) -> Unit
+) : RecyclerView.Adapter<TodoListAdapter.ViewHolder>() {
 
     override fun getItemCount(): Int {
-        return todoList.size
+        return todoListManager.todoList.size
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
-            ItemTodoBinding.inflate(LayoutInflater.from(parent.context), parent, false), itemClickListener
+            ItemTodoBinding.inflate(LayoutInflater.from(parent.context), parent, false),
+            itemClickListener
         )
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(todoList[position])
+        holder.bind(todoListManager.todoList[position])
     }
 
-    inner class ViewHolder(private val binding: ItemTodoBinding, private val itemClickListener: (Int, TodoModel) -> Unit) :
+    inner class ViewHolder(
+        private val binding: ItemTodoBinding,
+        private val itemClickListener: (TodoModel, Int) -> Unit
+    ) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: TodoModel) = with(binding) {
-            root.setOnClickListener {
-                itemClickListener(adapterPosition, item)
-            }
             txtTodoTitle.text = item.title
             txtTodoContent.text = item.content
+            switchTodo.isChecked = item.isSwitch
+            root.setOnClickListener {
+                itemClickListener(item, adapterPosition)
+            }
+            switchTodo.setOnClickListener {
+                switchClickListener(item, adapterPosition)
+            }
         }
     }
 
     fun addItem(todoModel: TodoModel?) {
         todoModel?.let {
-            todoList.add(todoModel)
-            notifyItemChanged(todoList.size - 1)
+            todoListManager.addItem(todoModel)
+            notifyItemChanged(todoListManager.todoList.size - 1)
         }
     }
 
     fun updateItem(todoModel: TodoModel?, position: Int?) {
-        if (todoModel == null || position == null) {
+        if(todoModel == null || position == null) {
             return
         }
-//        todoList[position] = todoModel.copy(title = todoModel.title, content = todoModel.content)
-        todoList[position] = todoModel
+        todoListManager.updateItem(todoModel, position)
         notifyItemChanged(position)
     }
 
     fun removeItem(position: Int?) {
         if (position == null) return
-        todoList.removeAt(position)
+        todoListManager.removeItem(position)
         notifyItemRemoved(position)
+    }
+
+    fun updateSwitch(todoModel: TodoModel?, position: Int?) {
+        if(todoModel == null || position == null) {
+            return
+        }
+        todoListManager.updateSwitch(todoModel, position)
+        notifyItemChanged(position)
     }
 }

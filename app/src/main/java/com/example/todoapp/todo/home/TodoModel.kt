@@ -6,5 +6,6 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class TodoModel(
     val title: String,
-    val content: String
+    val content: String,
+    val isSwitch: Boolean
 ) : Parcelable
