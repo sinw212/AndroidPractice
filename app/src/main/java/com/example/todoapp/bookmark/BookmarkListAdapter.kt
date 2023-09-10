@@ -2,14 +2,14 @@ package com.example.todoapp.bookmark
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todoapp.databinding.ItemBookmarkBinding
 import com.example.todoapp.todo.home.TodoListManager
 import com.example.todoapp.todo.home.TodoModel
 
-class BookmarkListAdapter(
-    val switchClickListener: (TodoModel) -> Unit
-) : RecyclerView.Adapter<BookmarkListAdapter.ViewHolder>() {
+class BookmarkListAdapter(val switchClickListener: (TodoModel) -> Unit) : ListAdapter<TodoModel, BookmarkListAdapter.ViewHolder>(diffUtil) {
 
     override fun getItemCount(): Int {
         return TodoListManager.bookmarkList.size
@@ -49,5 +49,17 @@ class BookmarkListAdapter(
     fun updateBookmarkList() {
         TodoListManager.updateBookmarkList()
         notifyDataSetChanged()
+    }
+
+    companion object {
+        val diffUtil = object: DiffUtil.ItemCallback<TodoModel>() {
+            override fun areItemsTheSame(oldItem: TodoModel, newItem: TodoModel): Boolean {
+                return oldItem == newItem
+            }
+
+            override fun areContentsTheSame(oldItem: TodoModel, newItem: TodoModel): Boolean {
+                return oldItem.id == newItem.id
+            }
+        }
     }
 }

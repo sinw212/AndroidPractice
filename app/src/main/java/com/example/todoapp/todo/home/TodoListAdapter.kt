@@ -2,13 +2,15 @@ package com.example.todoapp.todo.home
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todoapp.databinding.ItemTodoBinding
 
 class TodoListAdapter(
     val itemClickListener: (TodoModel, Int) -> Unit,
     val switchClickListener: (TodoModel, Int) -> Unit
-) : RecyclerView.Adapter<TodoListAdapter.ViewHolder>() {
+) : ListAdapter<TodoModel, TodoListAdapter.ViewHolder>(diffUtil) {
 
     override fun getItemCount(): Int {
         return TodoListManager.todoList.size
@@ -24,8 +26,7 @@ class TodoListAdapter(
         holder.bind(TodoListManager.todoList[position])
     }
 
-    inner class ViewHolder(private val binding: ItemTodoBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+    inner class ViewHolder(private val binding: ItemTodoBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: TodoModel) = with(binding) {
             txtTodoTitle.text = item.title
             txtTodoContent.text = item.content
@@ -69,5 +70,17 @@ class TodoListAdapter(
 
     fun updateTodoList() {
         notifyDataSetChanged()
+    }
+
+    companion object {
+        val diffUtil = object: DiffUtil.ItemCallback<TodoModel>() {
+            override fun areItemsTheSame(oldItem: TodoModel, newItem: TodoModel): Boolean {
+                return oldItem == newItem
+            }
+
+            override fun areContentsTheSame(oldItem: TodoModel, newItem: TodoModel): Boolean {
+                return oldItem.id == newItem.id
+            }
+        }
     }
 }
