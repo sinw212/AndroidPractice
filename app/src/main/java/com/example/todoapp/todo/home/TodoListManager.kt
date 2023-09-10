@@ -1,6 +1,6 @@
 package com.example.todoapp.todo.home
 
-class TodoListManager {
+object TodoListManager {
     val todoList: ArrayList<TodoModel> = arrayListOf()
     var bookmarkList: ArrayList<TodoModel> = arrayListOf()
 
@@ -18,6 +18,9 @@ class TodoListManager {
 
     fun updateSwitch(todoModel: TodoModel, position: Int) {
         todoList[position] = todoModel.copy(isSwitch = (!todoModel.isSwitch))
+    }
+
+    fun updateBookmarkList() {
         bookmarkList = ArrayList(this.todoList.filter { it.isSwitch })
     }
 }

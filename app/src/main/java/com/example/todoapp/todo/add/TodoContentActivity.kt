@@ -10,6 +10,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.todoapp.R
 import com.example.todoapp.databinding.ActivityTodoBinding
+import com.example.todoapp.todo.home.TodoListManager
 import com.example.todoapp.todo.home.TodoModel
 
 class TodoContentActivity : AppCompatActivity() {
@@ -100,7 +101,12 @@ class TodoContentActivity : AppCompatActivity() {
             putExtra(EXTRA_POSITION, position)
             putExtra(
                 EXTRA_MODEL,
-                TodoModel(binding.edtTitle.text.toString(), binding.edtContent.text.toString(), todoModel?.isSwitch ?: false)
+                TodoModel(
+                    todoModel?.id ?: TodoListManager.todoList.size,
+                    binding.edtTitle.text.toString(),
+                    binding.edtContent.text.toString(),
+                    todoModel?.isSwitch ?: false
+                )
             )
         }
         setResult(RESULT_OK, todoIntent)

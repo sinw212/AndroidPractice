@@ -6,29 +6,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.todoapp.databinding.FragmentBookmarkBinding
-import com.example.todoapp.todo.home.TodoListManager
 import com.example.todoapp.todo.home.TodoModel
 
 class BookmarkFragment : Fragment() {
     private var _binding: FragmentBookmarkBinding? = null
     private val binding get() = _binding!!
 
-    private val todoListManager by lazy{
-        TodoListManager()
-    }
-
     private val bookmarkListAdapter by lazy {
         BookmarkListAdapter(
-            todoListManager,
-            switchClickListener = { item, position ->
-                updateTodoSwitch(item, position)
+            switchClickListener = { item ->
+                updateTodoSwitch(item)
             }
         )
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentBookmarkBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -42,8 +36,8 @@ class BookmarkFragment : Fragment() {
         bookmarkList.adapter = bookmarkListAdapter
     }
 
-    private fun updateTodoSwitch(todoModel: TodoModel?, position: Int?) {
-        bookmarkListAdapter.updateSwitch(todoModel, position)
+    private fun updateTodoSwitch(todoModel: TodoModel?) {
+        bookmarkListAdapter.updateSwitch(todoModel)
     }
 
     override fun onResume() {

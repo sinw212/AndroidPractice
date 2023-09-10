@@ -6,30 +6,25 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.todoapp.databinding.ItemTodoBinding
 
 class TodoListAdapter(
-    private val todoListManager: TodoListManager,
     val itemClickListener: (TodoModel, Int) -> Unit,
     val switchClickListener: (TodoModel, Int) -> Unit
 ) : RecyclerView.Adapter<TodoListAdapter.ViewHolder>() {
 
     override fun getItemCount(): Int {
-        return todoListManager.todoList.size
+        return TodoListManager.todoList.size
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
-            ItemTodoBinding.inflate(LayoutInflater.from(parent.context), parent, false),
-            itemClickListener
+            ItemTodoBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         )
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(todoListManager.todoList[position])
+        holder.bind(TodoListManager.todoList[position])
     }
 
-    inner class ViewHolder(
-        private val binding: ItemTodoBinding,
-        private val itemClickListener: (TodoModel, Int) -> Unit
-    ) :
+    inner class ViewHolder(private val binding: ItemTodoBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: TodoModel) = with(binding) {
             txtTodoTitle.text = item.title
@@ -46,8 +41,8 @@ class TodoListAdapter(
 
     fun addItem(todoModel: TodoModel?) {
         todoModel?.let {
-            todoListManager.addItem(todoModel)
-            notifyItemChanged(todoListManager.todoList.size - 1)
+            TodoListManager.addItem(todoModel)
+            notifyItemChanged(TodoListManager.todoList.size - 1)
         }
     }
 
@@ -55,13 +50,13 @@ class TodoListAdapter(
         if(todoModel == null || position == null) {
             return
         }
-        todoListManager.updateItem(todoModel, position)
+        TodoListManager.updateItem(todoModel, position)
         notifyItemChanged(position)
     }
 
     fun removeItem(position: Int?) {
         if (position == null) return
-        todoListManager.removeItem(position)
+        TodoListManager.removeItem(position)
         notifyItemRemoved(position)
     }
 
@@ -69,7 +64,10 @@ class TodoListAdapter(
         if(todoModel == null || position == null) {
             return
         }
-        todoListManager.updateSwitch(todoModel, position)
-        notifyItemChanged(position)
+        TodoListManager.updateSwitch(todoModel, position)
+    }
+
+    fun updateTodoList() {
+        notifyDataSetChanged()
     }
 }

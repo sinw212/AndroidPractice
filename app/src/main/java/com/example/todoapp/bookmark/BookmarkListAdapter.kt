@@ -8,14 +8,11 @@ import com.example.todoapp.todo.home.TodoListManager
 import com.example.todoapp.todo.home.TodoModel
 
 class BookmarkListAdapter(
-    private val todoListManager: TodoListManager,
-    val switchClickListener: (TodoModel, Int) -> Unit
+    val switchClickListener: (TodoModel) -> Unit
 ) : RecyclerView.Adapter<BookmarkListAdapter.ViewHolder>() {
 
-    private var bookmarkList = ArrayList<TodoModel>()
-
     override fun getItemCount(): Int {
-        return bookmarkList.size
+        return TodoListManager.bookmarkList.size
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -25,7 +22,7 @@ class BookmarkListAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(bookmarkList[position])
+        holder.bind(TodoListManager.bookmarkList[position])
     }
 
     inner class ViewHolder(private val binding: ItemBookmarkBinding) :
@@ -35,21 +32,22 @@ class BookmarkListAdapter(
             txtBookmarkContent.text = item.content
             switchBookmark.isChecked = item.isSwitch
             switchBookmark.setOnClickListener {
-                switchClickListener(item, adapterPosition)
+                switchClickListener(item)
             }
         }
     }
 
-    fun updateSwitch(todoModel: TodoModel?, position: Int?) {
-        if(todoModel == null || position == null) {
+    fun updateSwitch(todoModel: TodoModel?) {
+        if(todoModel == null) {
             return
         }
-        todoListManager.updateSwitch(todoModel, position)
-        notifyItemChanged(position)
+        val updatePosition = TodoListManager.todoList.indexOfFirst { it.id == todoModel.id }
+        TodoListManager.updateSwitch(todoModel, updatePosition)
+        updateBookmarkList()
     }
 
     fun updateBookmarkList() {
-        this.bookmarkList = todoListManager.bookmarkList
+        TodoListManager.updateBookmarkList()
         notifyDataSetChanged()
     }
 }

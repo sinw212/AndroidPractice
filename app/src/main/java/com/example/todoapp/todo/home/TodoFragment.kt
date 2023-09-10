@@ -36,13 +36,8 @@ class TodoFragment : Fragment() {
         }
     }
 
-    private val todoListManager by lazy {
-        TodoListManager()
-    }
-
     private val todoListAdapter by lazy {
         TodoListAdapter(
-            todoListManager,
             itemClickListener = { item, position ->
                 editTodoLauncher.launch(TodoContentActivity.newIntentForEdit(requireContext(), position, item))
             },
@@ -54,7 +49,7 @@ class TodoFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentTodoBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -82,6 +77,11 @@ class TodoFragment : Fragment() {
 
     private fun updateTodoSwitch(todoModel: TodoModel?, position: Int?) {
         todoListAdapter.updateSwitch(todoModel, position)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        todoListAdapter.updateTodoList()
     }
 
     override fun onDestroyView() {
