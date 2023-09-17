@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.fragment.app.viewModels
 import com.example.todoapp.databinding.FragmentTodoBinding
 import com.example.todoapp.todo.add.TodoContentActivity
 import com.example.todoapp.todo.add.TodoContentType
@@ -15,6 +16,8 @@ import com.example.todoapp.todo.add.TodoContentType
 class TodoFragment : Fragment() {
     private var _binding: FragmentTodoBinding? = null
     private val binding get() = _binding!!
+
+    private val viewModel : TodoViewModel by viewModels()
 
     private val editTodoLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if(result.resultCode == Activity.RESULT_OK) {
@@ -40,9 +43,6 @@ class TodoFragment : Fragment() {
         TodoListAdapter(
             itemClickListener = { item, position ->
                 editTodoLauncher.launch(TodoContentActivity.newIntentForEdit(requireContext(), position, item))
-            },
-            switchClickListener = { item, position ->
-                updateTodoSwitch(item, position)
             }
         )
     }
@@ -57,31 +57,29 @@ class TodoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
+        initModel()
     }
 
     private fun initView() = with(binding) {
         todoList.adapter = todoListAdapter
     }
 
-    fun addTodoContent(todoModel: TodoModel?) {
-        todoListAdapter.addItem(todoModel)
+    private fun initModel() = with(viewModel) {
+        list.observe(viewLifecycleOwner) {
+            todoListAdapter.submitList(it)
+        }
     }
 
-    private fun updateTodoContent(todoModel: TodoModel?, position: Int?) {
-        todoListAdapter.updateItem(todoModel, position)
+    fun addTodoContent(todoModel: TodoModel?) {
+        viewModel.addTodoItem(todoModel)
+    }
+
+    private fun updateTodoContent(todoModel: TodoModel?, position: Int? = null) {
+        viewModel.modifyTodoItem(todoModel, position)
     }
 
     private fun removeTodoContent(position: Int?) {
-        todoListAdapter.removeItem(position)
-    }
-
-    private fun updateTodoSwitch(todoModel: TodoModel?, position: Int?) {
-        todoListAdapter.updateSwitch(todoModel, position)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        todoListAdapter.updateTodoList()
+        viewModel.removeTodoItem(position)
     }
 
     override fun onDestroyView() {

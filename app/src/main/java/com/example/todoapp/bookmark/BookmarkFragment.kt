@@ -13,11 +13,7 @@ class BookmarkFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val bookmarkListAdapter by lazy {
-        BookmarkListAdapter(
-            switchClickListener = { item ->
-                updateTodoSwitch(item)
-            }
-        )
+        BookmarkListAdapter()
     }
 
     override fun onCreateView(
@@ -34,15 +30,6 @@ class BookmarkFragment : Fragment() {
 
     private fun initView() = with(binding) {
         bookmarkList.adapter = bookmarkListAdapter
-    }
-
-    private fun updateTodoSwitch(todoModel: TodoModel?) {
-        bookmarkListAdapter.updateSwitch(todoModel)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        bookmarkListAdapter.updateBookmarkList()
     }
 
     override fun onDestroyView() {

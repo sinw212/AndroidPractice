@@ -5,7 +5,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class TodoModel(
-    val id: Int,
+    val id: Long? = null,
     val title: String,
     val content: String,
     val isSwitch: Boolean

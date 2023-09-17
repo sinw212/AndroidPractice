@@ -10,7 +10,6 @@ import com.example.todoapp.R
 import com.example.todoapp.databinding.ActivityMainBinding
 import com.example.todoapp.todo.add.TodoContentActivity
 import com.example.todoapp.todo.home.TodoFragment
-import com.example.todoapp.todo.home.TodoListManager
 import com.example.todoapp.todo.home.TodoModel
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -47,8 +46,6 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolBar)
         supportActionBar?.setDisplayShowTitleEnabled(false) //true로 설정 시 기본 옵션(뒤로가기 버튼) 활성화
         toolBar.title = getString(R.string.main_toolbar)
-
-        TodoListManager //initialize Instance
 
         // ViewPager2Adapter Init
         viewPager.adapter = viewPager2Adapter
