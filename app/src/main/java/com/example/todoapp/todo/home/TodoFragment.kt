@@ -9,16 +9,19 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import com.example.todoapp.databinding.FragmentTodoBinding
 import com.example.todoapp.main.MainActivity
 import com.example.todoapp.todo.add.TodoContentActivity
 import com.example.todoapp.todo.add.TodoContentType
+import java.util.concurrent.atomic.AtomicLong
 
 class TodoFragment : Fragment() {
     private var _binding: FragmentTodoBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: TodoViewModel by viewModels()
+    private val idGenerate = AtomicLong(1L)
+    private val viewModel: TodoViewModel by viewModels { TodoViewModel.TodoViewModelFactory(idGenerate) }
 
     private val editTodoLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
