@@ -7,7 +7,6 @@ import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.viewpager2.widget.ViewPager2
 import com.example.todoapp.R
-import com.example.todoapp.bookmark.BookmarkFragment
 import com.example.todoapp.databinding.ActivityMainBinding
 import com.example.todoapp.todo.add.TodoContentActivity
 import com.example.todoapp.todo.home.TodoFragment
@@ -72,7 +71,4 @@ class MainActivity : AppCompatActivity() {
             addTodoLauncher.launch(TodoContentActivity.newIntentForAdd(this@MainActivity))
         }
     }
-
-    fun getTodoFragment() = viewPager2Adapter.getFragment(0) as TodoFragment
-    fun getBookmarkFragment() = viewPager2Adapter.getFragment(1) as BookmarkFragment
 }

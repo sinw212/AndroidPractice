@@ -5,22 +5,26 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.MediatorLiveData
 import com.example.todoapp.databinding.FragmentBookmarkBinding
-import com.example.todoapp.main.MainActivity
-import com.example.todoapp.todo.home.TodoModel
+import com.example.todoapp.main.MainViewModel
 
 class BookmarkFragment : Fragment() {
     private var _binding: FragmentBookmarkBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: BookmarkViewModel by viewModels()
+    private val bookmarkViewModel: BookmarkViewModel by viewModels()
+    private val mainViewModel: MainViewModel by activityViewModels()
+
+    private val bookmarkListMediator = MediatorLiveData<List<BookmarkModel>>()
 
     private val bookmarkListAdapter by lazy {
         BookmarkListAdapter(
             switchClickListener = { item ->
-                removeBookmarkContent(item)
-                updateTodoItem(item)
+                removeBookmarkItem(item)
+                modifyTodoItem(item)
             }
         )
     }
@@ -42,22 +46,25 @@ class BookmarkFragment : Fragment() {
         bookmarkList.adapter = bookmarkListAdapter
     }
 
-    private fun initViewModel() = with(viewModel) {
-        list.observe(viewLifecycleOwner) {
+    private fun initViewModel() {
+        bookmarkViewModel.list.observe(viewLifecycleOwner) {
+            mainViewModel.modifyBookmarkList(it)
+        }
+        mainViewModel.bookmarkList.observe(viewLifecycleOwner) {
+            bookmarkListMediator.value = it
+        }
+        bookmarkListMediator.observe(viewLifecycleOwner) {
             bookmarkListAdapter.submitList(it)
         }
     }
 
-    fun addBookmarkContent(bookmarkModel: BookmarkModel?) {
-        viewModel.addBookmarkItem(bookmarkModel)
+    private fun removeBookmarkItem(bookmarkModel: BookmarkModel?) {
+        bookmarkViewModel.removeBookmarkItem(bookmarkModel)
+        mainViewModel.modifyBookmarkItem(bookmarkModel?.copy(isSwitch = false))
     }
 
-    fun removeBookmarkContent(bookmarkModel: BookmarkModel?) {
-        viewModel.removeBookmarkItem(bookmarkModel)
-    }
-
-    private fun updateTodoItem(bookmarkModel: BookmarkModel) {
-        (activity as? MainActivity)?.getTodoFragment()?.modifyTodoItem(bookmarkModel.toTodoModel(), null)
+    private fun modifyTodoItem(bookmarkModel: BookmarkModel?) {
+        mainViewModel.modifyTodoItem(bookmarkModel?.toTodoModel())
     }
 
     override fun onDestroyView() {

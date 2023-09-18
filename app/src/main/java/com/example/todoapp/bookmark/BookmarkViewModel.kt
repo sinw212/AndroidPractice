@@ -8,18 +8,6 @@ class BookmarkViewModel: ViewModel() {
     private val _list: MutableLiveData<List<BookmarkModel>> = MutableLiveData()
     val list: LiveData<List<BookmarkModel>> get() = _list
 
-    fun addBookmarkItem(
-        bookmarkModel: BookmarkModel?
-    ) {
-        if(bookmarkModel == null) {
-            return
-        }
-
-        val currentList = list.value.orEmpty().toMutableList()
-        currentList.add(bookmarkModel)
-        _list.value = currentList
-    }
-
     fun removeBookmarkItem(bookmarkModel: BookmarkModel?) {
         fun findIndex(item: BookmarkModel?): Int {
             val currentList = list.value.orEmpty().toMutableList()
