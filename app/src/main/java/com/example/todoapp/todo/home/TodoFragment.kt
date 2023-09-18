@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
 import com.example.todoapp.databinding.FragmentTodoBinding
+import com.example.todoapp.main.MainActivity
 import com.example.todoapp.todo.add.TodoContentActivity
 import com.example.todoapp.todo.add.TodoContentType
 
@@ -17,32 +18,47 @@ class TodoFragment : Fragment() {
     private var _binding: FragmentTodoBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel : TodoViewModel by viewModels()
+    private val viewModel: TodoViewModel by viewModels()
 
-    private val editTodoLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if(result.resultCode == Activity.RESULT_OK) {
-            val todoContentType = result.data?.getStringExtra(TodoContentActivity.EXTRA_TODO_CONTENT_TYPE)
+    private val editTodoLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val todoContentType =
+                    result.data?.getStringExtra(TodoContentActivity.EXTRA_TODO_CONTENT_TYPE)
 
-            val position = result.data?.getIntExtra(TodoContentActivity.EXTRA_POSITION, -1)
+                val position = result.data?.getIntExtra(TodoContentActivity.EXTRA_POSITION, -1)
 
-            val todoModel = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                result.data?.getParcelableExtra(TodoContentActivity.EXTRA_MODEL, TodoModel::class.java)
-            } else {
-                result.data?.getParcelableExtra(TodoContentActivity.EXTRA_MODEL)
-            }
+                val todoModel = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    result.data?.getParcelableExtra(
+                        TodoContentActivity.EXTRA_MODEL,
+                        TodoModel::class.java
+                    )
+                } else {
+                    result.data?.getParcelableExtra(TodoContentActivity.EXTRA_MODEL)
+                }
 
-            when(TodoContentType.from(todoContentType)) {
-                TodoContentType.EDIT -> updateTodoContent(todoModel, position)
-                TodoContentType.REMOVE -> removeTodoContent(position)
-                else -> Unit //nothing
+                when (TodoContentType.from(todoContentType)) {
+                    TodoContentType.EDIT -> modifyTodoItem(todoModel, position)
+                    TodoContentType.REMOVE -> removeTodoItem(position)
+                    else -> Unit //nothing
+                }
             }
         }
-    }
 
     private val todoListAdapter by lazy {
         TodoListAdapter(
             itemClickListener = { item, position ->
-                editTodoLauncher.launch(TodoContentActivity.newIntentForEdit(requireContext(), position, item))
+                editTodoLauncher.launch(
+                    TodoContentActivity.newIntentForEdit(
+                        requireContext(),
+                        position,
+                        item
+                    )
+                )
+            },
+            switchClickListener = { item, position ->
+                updateBookmarkList(item)
+                modifyTodoItem(item.copy(isSwitch = !item.isSwitch), position)
             }
         )
     }
@@ -57,29 +73,40 @@ class TodoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
-        initModel()
+        initViewModel()
     }
 
     private fun initView() = with(binding) {
         todoList.adapter = todoListAdapter
     }
 
-    private fun initModel() = with(viewModel) {
+    private fun initViewModel() = with(viewModel) {
         list.observe(viewLifecycleOwner) {
             todoListAdapter.submitList(it)
         }
     }
 
-    fun addTodoContent(todoModel: TodoModel?) {
+    fun addTodoItem(todoModel: TodoModel?) {
         viewModel.addTodoItem(todoModel)
     }
 
-    private fun updateTodoContent(todoModel: TodoModel?, position: Int? = null) {
+    fun modifyTodoItem(todoModel: TodoModel?, position: Int? = null) {
         viewModel.modifyTodoItem(todoModel, position)
     }
 
-    private fun removeTodoContent(position: Int?) {
+    private fun removeTodoItem(position: Int?) {
         viewModel.removeTodoItem(position)
+    }
+
+    private  fun updateBookmarkList(todoModel: TodoModel?) {
+        if (todoModel == null) {
+            return
+        }
+        if (!todoModel.isSwitch) {
+            (activity as? MainActivity)?.getBookmarkFragment()?.addBookmarkContent(todoModel.toBookmarkModel())
+        } else {
+            (activity as? MainActivity)?.getBookmarkFragment()?.removeBookmarkContent(todoModel.toBookmarkModel())
+        }
     }
 
     override fun onDestroyView() {

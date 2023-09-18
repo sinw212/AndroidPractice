@@ -8,14 +8,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.todoapp.databinding.ItemBookmarkBinding
 import com.example.todoapp.todo.home.TodoModel
 
-class BookmarkListAdapter :
-    ListAdapter<TodoModel, BookmarkListAdapter.ViewHolder>(object :
-        DiffUtil.ItemCallback<TodoModel>() {
-        override fun areItemsTheSame(oldItem: TodoModel, newItem: TodoModel): Boolean {
+class BookmarkListAdapter(
+    val switchClickListener: (BookmarkModel) -> Unit
+) :
+    ListAdapter<BookmarkModel, BookmarkListAdapter.ViewHolder>(object :
+        DiffUtil.ItemCallback<BookmarkModel>() {
+        override fun areItemsTheSame(oldItem: BookmarkModel, newItem: BookmarkModel): Boolean {
             return oldItem.id == newItem.id
         }
 
-        override fun areContentsTheSame(oldItem: TodoModel, newItem: TodoModel): Boolean {
+        override fun areContentsTheSame(oldItem: BookmarkModel, newItem: BookmarkModel): Boolean {
             return oldItem == newItem
         }
     }) {
@@ -32,10 +34,13 @@ class BookmarkListAdapter :
 
     inner class ViewHolder(private val binding: ItemBookmarkBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: TodoModel) = with(binding) {
+        fun bind(item: BookmarkModel) = with(binding) {
             txtBookmarkTitle.text = item.title
             txtBookmarkContent.text = item.content
             switchBookmark.isChecked = item.isSwitch
+            switchBookmark.setOnClickListener {
+                switchClickListener(item)
+            }
         }
     }
 }
