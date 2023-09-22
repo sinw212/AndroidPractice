@@ -100,10 +100,12 @@ class TodoContentActivity : AppCompatActivity() {
             putExtra(EXTRA_POSITION, position)
             putExtra(
                 EXTRA_MODEL,
-                TodoModel(
+                todoModel?.copy(
                     title = binding.edtTitle.text.toString(),
                     content = binding.edtContent.text.toString(),
-                    isSwitch = todoModel?.isSwitch ?: false
+                ) ?: TodoModel(
+                    title = binding.edtTitle.text.toString(),
+                    content = binding.edtContent.text.toString(),
                 )
             )
         }

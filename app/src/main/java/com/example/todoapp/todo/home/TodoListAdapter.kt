@@ -9,7 +9,7 @@ import com.example.todoapp.databinding.ItemTodoBinding
 
 class TodoListAdapter(
     val itemClickListener: (TodoModel, Int) -> Unit,
-    val switchClickListener: (TodoModel, Int) -> Unit,
+    val switchClickListener: (TodoModel) -> Unit,
 ) : ListAdapter<TodoModel, TodoListAdapter.ViewHolder>(
     object : DiffUtil.ItemCallback<TodoModel>() {
         override fun areItemsTheSame(oldItem: TodoModel, newItem: TodoModel): Boolean {
@@ -41,7 +41,7 @@ class TodoListAdapter(
                 itemClickListener(item, adapterPosition)
             }
             switchTodo.setOnClickListener {
-                switchClickListener(item, adapterPosition)
+                switchClickListener(item.copy(isSwitch = !item.isSwitch))
             }
         }
     }

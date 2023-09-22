@@ -17,6 +17,6 @@ fun BookmarkModel.toTodoModel(): TodoModel {
         id = id,
         title = title,
         content = content,
-        isSwitch = !isSwitch
+        isSwitch = isSwitch
     )
 }

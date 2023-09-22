@@ -6,10 +6,9 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todoapp.databinding.ItemBookmarkBinding
-import com.example.todoapp.todo.home.TodoModel
 
 class BookmarkListAdapter(
-    val switchClickListener: (BookmarkModel) -> Unit
+    val switchClickListener: (BookmarkModel, Int) -> Unit
 ) :
     ListAdapter<BookmarkModel, BookmarkListAdapter.ViewHolder>(object :
         DiffUtil.ItemCallback<BookmarkModel>() {
@@ -39,7 +38,7 @@ class BookmarkListAdapter(
             txtBookmarkContent.text = item.content
             switchBookmark.isChecked = item.isSwitch
             switchBookmark.setOnClickListener {
-                switchClickListener(item)
+                switchClickListener(item.copy(isSwitch = !item.isSwitch), adapterPosition)
             }
         }
     }

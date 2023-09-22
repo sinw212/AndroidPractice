@@ -12,8 +12,8 @@ class MainViewPagerAdapter(fragmentActivity: FragmentActivity) :
     private var fragments: ArrayList<MainTabs> = ArrayList()
 
     init {
-        fragments.add(MainTabs(TodoFragment(), R.string.main_tab_todo_title))
-        fragments.add(MainTabs(BookmarkFragment(), R.string.main_tab_bookmark_title))
+        fragments.add(MainTabs(TodoFragment.newInstance(), R.string.main_tab_todo_title))
+        fragments.add(MainTabs(BookmarkFragment.newInstance(), R.string.main_tab_bookmark_title))
     }
 
     fun getFragment(position: Int): Fragment {
