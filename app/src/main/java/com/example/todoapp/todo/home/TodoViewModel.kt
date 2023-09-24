@@ -6,10 +6,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import java.util.concurrent.atomic.AtomicLong
 
-class TodoViewModel(private val idGenerate: AtomicLong) : ViewModel() {
+class TodoViewModel(
+    private val repository: TodoRepository
+) : ViewModel() {
 
     private val _list: MutableLiveData<List<TodoModel>> = MutableLiveData()
     val list: LiveData<List<TodoModel>> get() = _list //읽기만 가능한 변수
+
+    init {
+        _list.value = repository.getTestData()
+    }
 
     fun addTodoItem(
         todoModel: TodoModel?
@@ -22,7 +28,7 @@ class TodoViewModel(private val idGenerate: AtomicLong) : ViewModel() {
         _list.value = currentList.apply {
             add(
                 todoModel.copy(
-                    id = idGenerate.getAndIncrement()
+                    id = repository.getGenerateId()
                 )
             )
         }
@@ -64,11 +70,11 @@ class TodoViewModel(private val idGenerate: AtomicLong) : ViewModel() {
     }
 }
 
-class TodoViewModelFactory() : ViewModelProvider.Factory {
-    private val idGenerate = AtomicLong(1L)
+class TodoViewModelFactory : ViewModelProvider.Factory {
+    private val todoRepository = TodoRepositoryImpl(TodoLocalDataSource())
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(TodoViewModel::class.java)) {
-            return TodoViewModel(idGenerate) as T
+            return TodoViewModel(todoRepository) as T
         } else {
             throw IllegalArgumentException("Unknown ViewModel class")
         }
