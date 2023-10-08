@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.example.todoapp.data.repository.TodoRepositoryImpl
 import java.util.concurrent.atomic.AtomicLong
 
 class TodoViewModel(
@@ -17,61 +18,21 @@ class TodoViewModel(
         _list.value = repository.getTestData()
     }
 
-    fun addTodoItem(
-        todoModel: TodoModel?
-    ) {
-        if (todoModel == null) {
-            return
-        }
-
-        val currentList = list.value.orEmpty().toMutableList()
-        _list.value = currentList.apply {
-            add(
-                todoModel.copy(
-                    id = repository.getGenerateId()
-                )
-            )
-        }
+    fun addTodoItem(item: TodoModel?) {
+        _list.value = repository.addTodoItem(item)
     }
 
-    fun modifyTodoItem(
-        todoModel: TodoModel?,
-    ) {
-        fun findIndex(item: TodoModel?): Int {
-            val currentList = list.value.orEmpty().toMutableList()
-            val findTodo = currentList.find {
-                it.id == item?.id
-            }
-            return currentList.indexOf(findTodo)
-        }
-
-        if (todoModel == null) {
-            return
-        }
-
-        val findPosition = findIndex(todoModel)
-        if (findPosition < 0) {
-            return
-        }
-
-        val currentList = list.value.orEmpty().toMutableList()
-        currentList[findPosition] = todoModel
-        _list.value = currentList
+    fun modifyTodoItem(item: TodoModel?, ) {
+        _list.value = repository.modifyTodoItem(item)
     }
 
     fun removeTodoItem(position: Int?) {
-        if (position == null || position < 0) {
-            return
-        }
-
-        val currentList = list.value.orEmpty().toMutableList()
-        currentList.removeAt(position)
-        _list.value = currentList
+        _list.value = repository.removeTodoItem(position)
     }
 }
 
 class TodoViewModelFactory : ViewModelProvider.Factory {
-    private val todoRepository = TodoRepositoryImpl(TodoLocalDataSource())
+    private val todoRepository = TodoRepositoryImpl(AtomicLong(1L))
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(TodoViewModel::class.java)) {
             return TodoViewModel(todoRepository) as T

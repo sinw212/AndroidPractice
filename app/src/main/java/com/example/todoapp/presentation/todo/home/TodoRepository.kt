@@ -1,20 +1,8 @@
 package com.example.todoapp.presentation.todo.home
 
 interface TodoRepository {
-    fun getGenerateId(): Long
-
     fun getTestData(): List<TodoModel>
-}
-
-class TodoRepositoryImpl(
-    private val locale: TodoLocalDataSource
-) : TodoRepository {
-
-    override fun getGenerateId(): Long {
-        return locale.getGenerateId()
-    }
-
-    override fun getTestData(): List<TodoModel> {
-        return locale.getTestData()
-    }
+    fun addTodoItem(item: TodoModel?): List<TodoModel>
+    fun modifyTodoItem(item: TodoModel?): List<TodoModel>
+    fun removeTodoItem(position: Int?): List<TodoModel>
 }
