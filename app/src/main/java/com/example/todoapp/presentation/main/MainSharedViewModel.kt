@@ -1,12 +1,12 @@
-package com.example.todoapp.main
+package com.example.todoapp.presentation.main
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.todoapp.bookmark.BookmarkModel
-import com.example.todoapp.bookmark.toTodoModel
-import com.example.todoapp.todo.home.TodoModel
-import com.example.todoapp.todo.home.toBookmarkModel
+import com.example.todoapp.presentation.bookmark.BookmarkModel
+import com.example.todoapp.presentation.bookmark.toTodoModel
+import com.example.todoapp.presentation.todo.home.TodoModel
+import com.example.todoapp.presentation.todo.home.toBookmarkModel
 
 class MainSharedViewModel: ViewModel() {
     private val _todoEvent: MutableLiveData<MainSharedEventForTodo> = MutableLiveData()

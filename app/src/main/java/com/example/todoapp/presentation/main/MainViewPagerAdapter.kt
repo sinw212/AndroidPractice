@@ -1,11 +1,11 @@
-package com.example.todoapp.main
+package com.example.todoapp.presentation.main
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.todoapp.R
-import com.example.todoapp.bookmark.BookmarkFragment
-import com.example.todoapp.todo.home.TodoFragment
+import com.example.todoapp.presentation.bookmark.BookmarkFragment
+import com.example.todoapp.presentation.todo.home.TodoFragment
 
 class MainViewPagerAdapter(fragmentActivity: FragmentActivity) :
     FragmentStateAdapter(fragmentActivity) {

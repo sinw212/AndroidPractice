@@ -1,4 +1,4 @@
-package com.example.todoapp.bookmark
+package com.example.todoapp.presentation.bookmark
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -8,8 +8,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.example.todoapp.databinding.FragmentBookmarkBinding
-import com.example.todoapp.main.MainSharedEventForBookmark
-import com.example.todoapp.main.MainSharedViewModel
+import com.example.todoapp.presentation.main.MainSharedEventForBookmark
+import com.example.todoapp.presentation.main.MainSharedViewModel
 
 class BookmarkFragment : Fragment() {
 

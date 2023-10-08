@@ -1,4 +1,4 @@
-package com.example.todoapp.main
+package com.example.todoapp.presentation.main
 
 import android.app.Activity
 import android.os.Build
@@ -8,9 +8,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.viewpager2.widget.ViewPager2
 import com.example.todoapp.R
 import com.example.todoapp.databinding.ActivityMainBinding
-import com.example.todoapp.todo.add.TodoContentActivity
-import com.example.todoapp.todo.home.TodoFragment
-import com.example.todoapp.todo.home.TodoModel
+import com.example.todoapp.presentation.todo.add.TodoContentActivity
+import com.example.todoapp.presentation.todo.home.TodoFragment
+import com.example.todoapp.presentation.todo.home.TodoModel
 import com.google.android.material.tabs.TabLayoutMediator
 
 class MainActivity : AppCompatActivity() {

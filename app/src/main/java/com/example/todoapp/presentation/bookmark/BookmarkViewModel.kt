@@ -1,4 +1,4 @@
-package com.example.todoapp.bookmark
+package com.example.todoapp.presentation.bookmark
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

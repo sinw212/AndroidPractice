@@ -1,20 +1,20 @@
-package com.example.todoapp.todo.home
+package com.example.todoapp.presentation.bookmark
 
 import android.os.Parcelable
-import com.example.todoapp.bookmark.BookmarkModel
+import com.example.todoapp.presentation.todo.home.TodoModel
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class TodoModel(
-    val id: Long? = null,
+data class BookmarkModel(
+    val id: Long,
     val title: String?,
     val content: String?,
     val isSwitch: Boolean = false
 ) : Parcelable
 
-fun TodoModel.toBookmarkModel(): BookmarkModel {
-    return BookmarkModel(
-        id = id ?: 0,
+fun BookmarkModel.toTodoModel(): TodoModel {
+    return TodoModel(
+        id = id,
         title = title,
         content = content,
         isSwitch = isSwitch

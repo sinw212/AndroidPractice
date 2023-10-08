@@ -1,4 +1,4 @@
-package com.example.todoapp.todo.home
+package com.example.todoapp.presentation.todo.home
 
 import android.app.Activity
 import android.os.Build
@@ -11,10 +11,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.example.todoapp.databinding.FragmentTodoBinding
-import com.example.todoapp.main.MainSharedEventForTodo
-import com.example.todoapp.main.MainSharedViewModel
-import com.example.todoapp.todo.add.TodoContentActivity
-import com.example.todoapp.todo.add.TodoContentType
+import com.example.todoapp.presentation.main.MainSharedEventForTodo
+import com.example.todoapp.presentation.main.MainSharedViewModel
+import com.example.todoapp.presentation.todo.add.TodoContentActivity
+import com.example.todoapp.presentation.todo.add.TodoContentType
 
 class TodoFragment : Fragment() {
 

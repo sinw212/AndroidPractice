@@ -1,4 +1,4 @@
-package com.example.todoapp.todo.add
+package com.example.todoapp.presentation.todo.add
 
 enum class TodoContentType {
     ADD, EDIT, REMOVE;
