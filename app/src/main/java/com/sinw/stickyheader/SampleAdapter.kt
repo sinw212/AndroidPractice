@@ -31,27 +31,31 @@ class SampleAdapter : ListAdapter<ListItemData, SampleAdapter.ViewHolder>(
 
     abstract class ViewHolder(
         root: View
-    ): RecyclerView.ViewHolder(root) {
+    ) : RecyclerView.ViewHolder(root) {
         abstract fun onBind(item: ListItemData)
     }
 
     fun isHeader(position: Int) = getItemViewType(position) == SampleItemViewType.TOP_HOLDER.ordinal
 
     fun getHeaderView(list: RecyclerView, position: Int): View? {
-        val lastIndex =
-            if (position < itemCount)
-                position else itemCount - 1
+        val lastIndex = if (position < itemCount) position else itemCount - 1
         for (index in lastIndex downTo 0) {
-            val model = getItemViewType(index)
-            if (model == SampleItemViewType.TOP_HOLDER.ordinal) {
-                return LayoutInflater.from(list.context)
-                    .inflate(R.layout.viewholder_top_holder, list, false)
+            val item = getItem(index)
+            if (item is ListItemData.TOP_HOLDER) {
+                val binding =
+                    ViewholderTopHolderBinding.inflate(
+                        LayoutInflater.from(list.context),
+                        list,
+                        false
+                    )
+                binding.tvContents.text = item.item.toString()
+                return binding.root
             }
         }
         return null
     }
 
-    override fun getItemViewType(position: Int) = when(getItem(position)) {
+    override fun getItemViewType(position: Int) = when (getItem(position)) {
         is ListItemData.HEADER -> SampleItemViewType.HEADER.ordinal
         is ListItemData.TOP_HOLDER -> SampleItemViewType.TOP_HOLDER.ordinal
         is ListItemData.BOTTOM -> SampleItemViewType.BOTTOM.ordinal
@@ -97,7 +101,7 @@ class SampleAdapter : ListAdapter<ListItemData, SampleAdapter.ViewHolder>(
                 )
 
             else -> TODO("unknow viewtype : $viewType")
-    }
+        }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.onBind(getItem(position))
@@ -112,7 +116,11 @@ class SampleAdapter : ListAdapter<ListItemData, SampleAdapter.ViewHolder>(
     class TopHolderViewHolder(
         private val binding: ViewholderTopHolderBinding
     ) : ViewHolder(binding.root) {
-        override fun onBind(item: ListItemData) = Unit
+        override fun onBind(item: ListItemData) = with(binding) {
+            if (item is ListItemData.TOP_HOLDER) {
+                tvContents.text = item.item.toString()
+            }
+        }
     }
 
     class BottomViewHolder(
@@ -125,7 +133,7 @@ class SampleAdapter : ListAdapter<ListItemData, SampleAdapter.ViewHolder>(
         private val binding: ViewholderSampleBinding
     ) : ViewHolder(binding.root) {
         override fun onBind(item: ListItemData) = with(binding) {
-            if(item is ListItemData.ITEM) {
+            if (item is ListItemData.ITEM) {
                 tvContents.text = item.item.toString()
             }
         }

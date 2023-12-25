@@ -25,7 +25,7 @@ class HomeViewModel: ViewModel() {
         itemList.add(ListItemData.HEADER( ""))
         sampleDataList.forEachIndexed { index, sampleData ->
             if (index % 10 == 0) {
-                itemList.add(ListItemData.TOP_HOLDER(""))
+                itemList.add(ListItemData.TOP_HOLDER(index))
             }
             itemList.add(ListItemData.ITEM(sampleData))
         }
