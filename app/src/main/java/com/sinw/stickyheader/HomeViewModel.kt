@@ -19,6 +19,10 @@ class HomeViewModel: ViewModel() {
 
         val itemList = arrayListOf<ListItemData>()
         itemList.add(ListItemData.HEADER( ""))
+        itemList.add(ListItemData.HEADER( ""))
+        itemList.add(ListItemData.HEADER( ""))
+        itemList.add(ListItemData.HEADER( ""))
+        itemList.add(ListItemData.HEADER( ""))
         sampleDataList.forEachIndexed { index, sampleData ->
             if (index % 10 == 0) {
                 itemList.add(ListItemData.TOP_HOLDER(""))
