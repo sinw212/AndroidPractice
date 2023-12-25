@@ -2,43 +2,17 @@ package com.sinw.stickyheader
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import com.sinw.stickyheader.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
-    private val sampleAdapter = SampleAdapter()
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        val rvMain = findViewById<RecyclerView>(R.id.rvMain)
-        rvMain.adapter = sampleAdapter
-        rvMain.layoutManager = LinearLayoutManager(this)
-        val sectionItemDecoration = StickyHeaderItemDecoration(getSectionCallback())
-        rvMain.addItemDecoration(sectionItemDecoration)
-        initSampleList()
-    }
-
-    private fun getSectionCallback(): StickyHeaderItemDecoration.SectionCallback {
-        return object : StickyHeaderItemDecoration.SectionCallback {
-            override fun isHeader(position: Int): Boolean {
-                return sampleAdapter.isHeader(position)
-            }
-
-            override fun getHeaderLayoutView(list: RecyclerView, position: Int): View? {
-                return sampleAdapter.getHeaderView(list, position)
-            }
-        }
-    }
-
-    private fun initSampleList() {
-        val samplelist = arrayListOf<SampleData>()
-        for (i in 0..50) {
-            samplelist.add(SampleData("sample[$i]"))
-        }
-        sampleAdapter.initItemList(samplelist)
+        supportFragmentManager.beginTransaction().add(R.id.frameLayout, HomeFragment.newInstance()).commit()
     }
 }

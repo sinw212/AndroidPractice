@@ -4,10 +4,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-class SampleAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class SampleAdapter : ListAdapter<ListItemData, RecyclerView.ViewHolder>(
+    object : DiffUtil.ItemCallback<ListItemData>() {
+        override fun areItemsTheSame(
+            oldItem: ListItemData,
+            newItem: ListItemData
+        ): Boolean = oldItem == newItem
 
-    val itemList = arrayListOf<ListItemData>()
+        override fun areContentsTheSame(
+            oldItem: ListItemData,
+            newItem: ListItemData
+        ): Boolean = oldItem == newItem
+    }
+) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
@@ -40,35 +52,20 @@ class SampleAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             is HeaderViewHolder -> holder.bindView()
             is TopHolderViewHolder -> holder.bindView()
             is BottomViewHolder -> holder.bindView()
-            is SampleViewHolder -> holder.bindView(itemList[position].item as SampleData)
+            is SampleViewHolder -> holder.bindView(getItem(position).item as SampleData)
         }
     }
 
-    override fun getItemCount(): Int = itemList.size
+    override fun getItemViewType(position: Int) = getItem(position).type
 
-    override fun getItemViewType(position: Int) = itemList[position].type
-
-    fun initItemList(sampleList: ArrayList<SampleData>) {
-        itemList.add(ListItemData(TYPE_HEADER, ""))
-        sampleList.forEachIndexed { index, sampleData ->
-            if (index % 10 == 0) {
-                itemList.add(ListItemData(TYPE_TOP_HOLDER, ""))
-            }
-            itemList.add(ListItemData(TYPE_ITEM, sampleData))
-        }
-        itemList.add(ListItemData(TYPE_BOTTOM, ""))
-
-        notifyDataSetChanged()
-    }
-
-    fun isHeader(position: Int) = itemList[position].type == TYPE_TOP_HOLDER
+    fun isHeader(position: Int) = getItem(position).type == TYPE_TOP_HOLDER
 
     fun getHeaderView(list: RecyclerView, position: Int): View? {
         val lastIndex =
-            if (position < itemList.size)
-                position else itemList.size - 1
+            if (position < itemCount)
+                position else itemCount - 1
         for (index in lastIndex downTo 0) {
-            val model = itemList[index]
+            val model = getItem(index)
             if (model.type == TYPE_TOP_HOLDER) {
                 return LayoutInflater.from(list.context)
                     .inflate(R.layout.viewholder_top_holder, list, false)
