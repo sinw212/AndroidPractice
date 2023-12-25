@@ -18,14 +18,14 @@ class HomeViewModel: ViewModel() {
         }
 
         val itemList = arrayListOf<ListItemData>()
-        itemList.add(ListItemData(SampleAdapter.TYPE_HEADER, ""))
+        itemList.add(ListItemData.HEADER( ""))
         sampleDataList.forEachIndexed { index, sampleData ->
             if (index % 10 == 0) {
-                itemList.add(ListItemData(SampleAdapter.TYPE_TOP_HOLDER, ""))
+                itemList.add(ListItemData.TOP_HOLDER(""))
             }
-            itemList.add(ListItemData(SampleAdapter.TYPE_ITEM, sampleData))
+            itemList.add(ListItemData.ITEM(sampleData))
         }
-        itemList.add(ListItemData(SampleAdapter.TYPE_BOTTOM, ""))
+        itemList.add(ListItemData.BOTTOM(""))
 
         _sampleList.value = itemList
     }

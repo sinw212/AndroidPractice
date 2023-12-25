@@ -23,22 +23,22 @@ class SampleAdapter : ListAdapter<ListItemData, RecyclerView.ViewHolder>(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
-            TYPE_HEADER -> {
+            SampleItemViewType.HEADER.ordinal -> {
                 val view = LayoutInflater.from(parent.context)
                     .inflate(R.layout.viewholder_header, parent, false)
                 HeaderViewHolder(view)
             }
-            TYPE_TOP_HOLDER -> {
+            SampleItemViewType.TOP_HOLDER.ordinal -> {
                 val view = LayoutInflater.from(parent.context)
                     .inflate(R.layout.viewholder_top_holder, parent, false)
                 TopHolderViewHolder(view)
             }
-            TYPE_BOTTOM -> {
+            SampleItemViewType.BOTTOM.ordinal -> {
                 val view = LayoutInflater.from(parent.context)
                     .inflate(R.layout.viewholder_bottom, parent, false)
                 BottomViewHolder(view)
             }
-            TYPE_ITEM -> {
+            SampleItemViewType.ITEM.ordinal -> {
                 val view = LayoutInflater.from(parent.context)
                     .inflate(R.layout.viewholder_sample, parent, false)
                 SampleViewHolder(view)
@@ -52,21 +52,25 @@ class SampleAdapter : ListAdapter<ListItemData, RecyclerView.ViewHolder>(
             is HeaderViewHolder -> holder.bindView()
             is TopHolderViewHolder -> holder.bindView()
             is BottomViewHolder -> holder.bindView()
-            is SampleViewHolder -> holder.bindView(getItem(position).item as SampleData)
+            is SampleViewHolder -> holder.bindView(getItem(position))
         }
     }
 
-    override fun getItemViewType(position: Int) = getItem(position).type
+    override fun getItemViewType(position: Int) = when(getItem(position)) {
+        is ListItemData.HEADER -> SampleItemViewType.HEADER.ordinal
+        is ListItemData.TOP_HOLDER -> SampleItemViewType.TOP_HOLDER.ordinal
+        is ListItemData.BOTTOM -> SampleItemViewType.BOTTOM.ordinal
+        is ListItemData.ITEM -> SampleItemViewType.ITEM.ordinal
+    }
 
-    fun isHeader(position: Int) = getItem(position).type == TYPE_TOP_HOLDER
-
+    fun isHeader(position: Int) = getItemViewType(position) == SampleItemViewType.TOP_HOLDER.ordinal
     fun getHeaderView(list: RecyclerView, position: Int): View? {
         val lastIndex =
             if (position < itemCount)
                 position else itemCount - 1
         for (index in lastIndex downTo 0) {
-            val model = getItem(index)
-            if (model.type == TYPE_TOP_HOLDER) {
+            val model = getItemViewType(index)
+            if (model == SampleItemViewType.TOP_HOLDER.ordinal) {
                 return LayoutInflater.from(list.context)
                     .inflate(R.layout.viewholder_top_holder, list, false)
             }
@@ -75,11 +79,8 @@ class SampleAdapter : ListAdapter<ListItemData, RecyclerView.ViewHolder>(
         return null
     }
 
-    companion object {
-        const val TYPE_HEADER = 0
-        const val TYPE_TOP_HOLDER = 1
-        const val TYPE_BOTTOM = 2
-        const val TYPE_ITEM = 3
+    enum class SampleItemViewType {
+        HEADER, TOP_HOLDER, BOTTOM, ITEM
     }
 
     inner class HeaderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -97,8 +98,10 @@ class SampleAdapter : ListAdapter<ListItemData, RecyclerView.ViewHolder>(
     inner class SampleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tvContents = itemView.findViewById<TextView>(R.id.tvContents)
 
-        fun bindView(data: SampleData) {
-            tvContents.text = data.stringData
+        fun bindView(data: ListItemData) {
+            if(data is ListItemData.ITEM) {
+                tvContents.text = data.item.toString()
+            }
         }
     }
 }

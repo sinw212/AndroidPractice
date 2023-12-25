@@ -1,6 +1,19 @@
 package com.sinw.stickyheader
 
-data class ListItemData(
-    var type: Int,
-    var item: Any
-)
+sealed class ListItemData {
+    data class HEADER(
+        val item: Any
+    ) : ListItemData()
+
+    data class TOP_HOLDER(
+        val item: Any
+    ) : ListItemData()
+
+    data class BOTTOM(
+        val item: Any
+    ) : ListItemData()
+
+    data class ITEM(
+        val item: Any
+    ) : ListItemData()
+}
