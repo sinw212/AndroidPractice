@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.sinw.stickyheader"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.sinw.stickyheader"
