@@ -1,1 +1,1 @@
-###Multi ViewType RecyclerView - StickyHeader Sample (using ItemDecoration)
+### Multi ViewType RecyclerView - StickyHeader Sample (using ItemDecoration)
