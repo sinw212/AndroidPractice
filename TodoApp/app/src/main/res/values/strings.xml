@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">TodoApp</string>
 
-    <string name="main_toolbar">Camp</string>
+    <string name="main_toolbar">TodoApp</string>
     <string name="main_tab_todo_title">Todo</string>
     <string name="main_tab_bookmark_title">Bookmark</string>
 
