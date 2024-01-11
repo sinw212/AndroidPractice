@@ -1,6 +1,13 @@
 # Android Navigation codelab
 
-Content: https://codelabs.developers.google.com/codelabs/android-navigation/
+학습 내용 정리 : [Notion Link](https://scarce-seashore-b56.notion.site/Navigation-Component-40b3d5cd8fcd4832a607cd5e83f4db12?pvs=4)  
+Codelabs Link : https://codelabs.developers.google.com/codelabs/android-navigation/
+
+
+### 구현 화면
+<img src="https://github.com/sinw212/KotlinPractice/assets/53486320/17e56712-31ab-4ddd-a655-eafad21e58c6" width="800" height="400"/>
+<img src="https://github.com/sinw212/KotlinPractice/assets/53486320/c830a876-a36d-4a7d-9252-71db7847317e" width="500" height="500"/>
+
 
 License
 -------
