@@ -8,12 +8,8 @@ class GetSearchVideoUseCase(
     private val repository: SearchRepository
 ) {
     suspend operator fun invoke(
-        query: String,
-        sort: String = "recency",
-        page: Int = 1
+        params: GetSearchVideoParams
     ): SearchEntity<VideoDocumentEntity> = repository.getSearchVideo(
-        query,
-        sort,
-        page
+        params
     )
 }

@@ -11,7 +11,9 @@ import com.example.searchimage.data.repository.SearchRepositoryImpl
 import com.example.searchimage.domain.model.ImageDocumentEntity
 import com.example.searchimage.domain.model.SearchEntity
 import com.example.searchimage.domain.model.VideoDocumentEntity
+import com.example.searchimage.domain.usecase.GetSearchImageParams
 import com.example.searchimage.domain.usecase.GetSearchImageUseCase
+import com.example.searchimage.domain.usecase.GetSearchVideoParams
 import com.example.searchimage.domain.usecase.GetSearchVideoUseCase
 import com.example.searchimage.retrofit.RetrofitClient
 import kotlinx.coroutines.launch
@@ -27,8 +29,12 @@ class SearchViewModel(
     fun searchKeywordInfo(query: String) = viewModelScope.launch {
         runCatching {
             val items = createItems(
-                images = searchImage(query),
-                videos = searchVideo(query)
+                images = searchImage(
+                    GetSearchImageParams(query)
+                ),
+                videos = searchVideo(
+                    GetSearchVideoParams(query)
+                )
             )
             _searchList.postValue(items)
         }.onFailure {

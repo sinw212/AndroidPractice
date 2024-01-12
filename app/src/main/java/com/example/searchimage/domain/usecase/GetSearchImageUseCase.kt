@@ -8,12 +8,8 @@ class GetSearchImageUseCase(
     private val repository: SearchRepository
 ) {
     suspend operator fun invoke(
-        query: String,
-        sort: String = "recency",
-        page: Int = 1
+        params: GetSearchImageParams
     ): SearchEntity<ImageDocumentEntity> = repository.getSearchImage(
-        query,
-        sort,
-        page
+        params
     )
 }

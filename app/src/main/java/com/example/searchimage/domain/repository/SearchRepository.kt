@@ -3,17 +3,15 @@ package com.example.searchimage.domain.repository
 import com.example.searchimage.domain.model.ImageDocumentEntity
 import com.example.searchimage.domain.model.SearchEntity
 import com.example.searchimage.domain.model.VideoDocumentEntity
+import com.example.searchimage.domain.usecase.GetSearchImageParams
+import com.example.searchimage.domain.usecase.GetSearchVideoParams
 
 interface SearchRepository {
     suspend fun getSearchImage(
-        query: String,
-        sort: String,
-        page: Int
+        params: GetSearchImageParams
     ): SearchEntity<ImageDocumentEntity>
 
     suspend fun getSearchVideo(
-        query: String,
-        sort: String,
-        page: Int
+        params: GetSearchVideoParams
     ): SearchEntity<VideoDocumentEntity>
 }

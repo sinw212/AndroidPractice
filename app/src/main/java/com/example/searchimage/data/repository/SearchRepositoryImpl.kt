@@ -7,29 +7,27 @@ import com.example.searchimage.domain.model.SearchEntity
 import com.example.searchimage.domain.model.VideoDocumentEntity
 import com.example.searchimage.domain.model.toImageEntity
 import com.example.searchimage.domain.model.toVideoEntity
+import com.example.searchimage.domain.usecase.GetSearchImageParams
+import com.example.searchimage.domain.usecase.GetSearchVideoParams
 
 class SearchRepositoryImpl(
     private val remoteDatasource: SearchRemoteDatasource
 ) : SearchRepository {
     override suspend fun getSearchImage(
-        query: String,
-        sort: String,
-        page: Int
+        params: GetSearchImageParams
     ): SearchEntity<ImageDocumentEntity> =
         remoteDatasource.getSearchImage(
-            query = query,
-            sort = sort,
-            page = page
+            query = params.query,
+            sort = params.sort,
+            page = params.page
         ).toImageEntity()
 
     override suspend fun getSearchVideo(
-        query: String,
-        sort: String,
-        page: Int
+        params: GetSearchVideoParams
     ): SearchEntity<VideoDocumentEntity> =
         remoteDatasource.getSearchVideo(
-            query = query,
-            sort = sort,
-            page = page
+            query = params.query,
+            sort = params.sort,
+            page = params.page
         ).toVideoEntity()
 }
