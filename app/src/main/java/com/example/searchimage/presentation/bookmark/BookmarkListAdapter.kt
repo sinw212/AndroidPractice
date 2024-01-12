@@ -1,4 +1,4 @@
-package com.example.searchimage.presentation.search
+package com.example.searchimage.presentation.bookmark
 
 import android.view.LayoutInflater
 import android.view.View
@@ -8,35 +8,35 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.searchimage.R
-import com.example.searchimage.databinding.ItemSearchImageBinding
-import com.example.searchimage.databinding.ItemSearchVideoBinding
+import com.example.searchimage.databinding.ItemBookmarkImageBinding
+import com.example.searchimage.databinding.ItemBookmarkVideoBinding
 import com.example.searchimage.databinding.ItemUnknownBinding
 import java.text.SimpleDateFormat
 
-class SearchListAdapter(
-    private val bookmarkClickListener: (SearchItem) -> Unit
-) : ListAdapter<SearchItem, SearchListAdapter.ViewHolder>(
+class BookmarkListAdapter(
+    private val bookmarkClickListener: (BookmarkItem, Int) -> Unit
+) : ListAdapter<BookmarkItem, BookmarkListAdapter.ViewHolder>(
 
-    object : DiffUtil.ItemCallback<SearchItem>() {
+    object : DiffUtil.ItemCallback<BookmarkItem>() {
         override fun areItemsTheSame(
-            oldItem: SearchItem,
-            newItem: SearchItem
-        ): Boolean = if (oldItem is SearchItem.ImageItem && newItem is SearchItem.ImageItem) {
+            oldItem: BookmarkItem,
+            newItem: BookmarkItem
+        ): Boolean = if (oldItem is BookmarkItem.ImageItem && newItem is BookmarkItem.ImageItem) {
             oldItem.txtTitle == newItem.txtTitle
-        } else if (oldItem is SearchItem.VideoItem && newItem is SearchItem.VideoItem) {
+        } else if (oldItem is BookmarkItem.VideoItem && newItem is BookmarkItem.VideoItem) {
             oldItem.txtTitle == newItem.txtTitle
         } else {
             oldItem == newItem
         }
 
         override fun areContentsTheSame(
-            oldItem: SearchItem,
-            newItem: SearchItem
+            oldItem: BookmarkItem,
+            newItem: BookmarkItem
         ): Boolean = oldItem == newItem
     }
 ) {
 
-    enum class SearchItemViewType {
+    enum class BookmarkItemViewType {
         IMAGE, VIDEO
     }
 
@@ -44,19 +44,19 @@ class SearchListAdapter(
         root: View
     ) : RecyclerView.ViewHolder(root) {
 
-        abstract fun onBind(item: SearchItem)
+        abstract fun onBind(item: BookmarkItem)
     }
 
     override fun getItemViewType(position: Int): Int = when (getItem(position)) {
-        is SearchItem.ImageItem -> SearchItemViewType.IMAGE.ordinal
-        is SearchItem.VideoItem -> SearchItemViewType.VIDEO.ordinal
+        is BookmarkItem.ImageItem -> BookmarkItemViewType.IMAGE.ordinal
+        is BookmarkItem.VideoItem -> BookmarkItemViewType.VIDEO.ordinal
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
         when (viewType) {
-            SearchItemViewType.IMAGE.ordinal ->
+            BookmarkItemViewType.IMAGE.ordinal ->
                 ImageViewHolder(
-                    ItemSearchImageBinding.inflate(
+                    ItemBookmarkImageBinding.inflate(
                         LayoutInflater.from(parent.context),
                         parent,
                         false
@@ -64,9 +64,9 @@ class SearchListAdapter(
                     bookmarkClickListener
                 )
 
-            SearchItemViewType.VIDEO.ordinal ->
+            BookmarkItemViewType.VIDEO.ordinal ->
                 VideoViewHolder(
-                    ItemSearchVideoBinding.inflate(
+                    ItemBookmarkVideoBinding.inflate(
                         LayoutInflater.from(parent.context),
                         parent,
                         false
@@ -88,12 +88,12 @@ class SearchListAdapter(
     }
 
     class ImageViewHolder(
-        private val binding: ItemSearchImageBinding,
-        private val bookmarkClickListener: (SearchItem) -> Unit
+        private val binding: ItemBookmarkImageBinding,
+        private val bookmarkClickListener: (BookmarkItem, Int) -> Unit
     ) : ViewHolder(binding.root) {
 
-        override fun onBind(item: SearchItem) = with(binding) {
-            if (item is SearchItem.ImageItem) {
+        override fun onBind(item: BookmarkItem) = with(binding) {
+            if (item is BookmarkItem.ImageItem) {
                 imgThumbnail.load(item.imgThumbnail) {
                     placeholder(R.drawable.ic_img_placeholder)
                     error(R.drawable.ic_img_error)
@@ -102,19 +102,19 @@ class SearchListAdapter(
                 txtTitle.text = item.txtTitle
                 txtDateTime.text = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(item.date)
                 imgBookmark.setOnClickListener {
-                    bookmarkClickListener(item.copy(isBookmark = !item.isBookmark))
+                    bookmarkClickListener(item.copy(isBookmark = !item.isBookmark), adapterPosition)
                 }
             }
         }
     }
 
     class VideoViewHolder(
-        private val binding: ItemSearchVideoBinding,
-        private val bookmarkClickListener: (SearchItem) -> Unit
+        private val binding: ItemBookmarkVideoBinding,
+        private val bookmarkClickListener: (BookmarkItem, Int) -> Unit
     ) : ViewHolder(binding.root) {
 
-        override fun onBind(item: SearchItem) = with(binding) {
-            if (item is SearchItem.VideoItem) {
+        override fun onBind(item: BookmarkItem) = with(binding) {
+            if (item is BookmarkItem.VideoItem) {
                 imgThumbnail.load(item.imgThumbnail) {
                     placeholder(R.drawable.ic_img_placeholder)
                     error(R.drawable.ic_img_error)
@@ -123,7 +123,7 @@ class SearchListAdapter(
                 txtTitle.text = item.txtTitle
                 txtDateTime.text = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(item.date)
                 imgBookmark.setOnClickListener {
-                    bookmarkClickListener(item.copy(isBookmark = !item.isBookmark))
+                    bookmarkClickListener(item.copy(isBookmark = !item.isBookmark), adapterPosition)
                 }
             }
         }
@@ -133,6 +133,6 @@ class SearchListAdapter(
         binding: ItemUnknownBinding
     ) : ViewHolder(binding.root) {
 
-        override fun onBind(item: SearchItem) = Unit
+        override fun onBind(item: BookmarkItem) = Unit
     }
 }

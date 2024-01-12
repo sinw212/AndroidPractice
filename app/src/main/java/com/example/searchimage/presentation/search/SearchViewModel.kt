@@ -1,6 +1,5 @@
 package com.example.searchimage.presentation.search
 
-import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -24,7 +23,8 @@ class SearchViewModel(
 ) : ViewModel() {
 
     private val _searchList: MutableLiveData<List<SearchItem>> = MutableLiveData()
-    val searchList: LiveData<List<SearchItem>> get() = _searchList
+    val searchList: LiveData<List<SearchItem>>
+        get() = _searchList
 
     fun searchKeywordInfo(query: String) = viewModelScope.launch {
         runCatching {
@@ -53,7 +53,8 @@ class SearchViewModel(
             SearchItem.ImageItem(
                 imgThumbnail = document.thumbnailUrl,
                 txtTitle = "[Image] ${document.displaySitename}",
-                date = document.datetime
+                date = document.datetime,
+                false
             )
         }.orEmpty()
 
@@ -63,7 +64,8 @@ class SearchViewModel(
             SearchItem.VideoItem(
                 imgThumbnail = document.thumbnail,
                 txtTitle = "[Video] ${document.title}",
-                date = document.datetime
+                date = document.datetime,
+                false
             )
         }.orEmpty()
 
@@ -78,9 +80,26 @@ class SearchViewModel(
 
         return items
     }
+
+    fun updateSearchItem(item: SearchItem?) {
+        if (item == null) {
+            return
+        }
+
+        val currentList = searchList.value.orEmpty().toMutableList()
+
+        val findPosition = currentList.indexOfFirst { it.imgThumbnail == item.imgThumbnail }
+        if (findPosition >= 0) {
+            currentList[findPosition] = when (item) {
+                is SearchItem.ImageItem -> item.copy(isBookmark = item.isBookmark)
+                is SearchItem.VideoItem -> item.copy(isBookmark = item.isBookmark)
+            }
+            _searchList.value = currentList
+        }
+    }
 }
 
-class SearchViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
+class SearchViewModelFactory() : ViewModelProvider.Factory {
     private val repository = SearchRepositoryImpl(
         RetrofitClient.search
     )
