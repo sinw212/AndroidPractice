@@ -22,9 +22,9 @@ class SearchListAdapter(
             oldItem: SearchItem,
             newItem: SearchItem
         ): Boolean = if (oldItem is SearchItem.ImageItem && newItem is SearchItem.ImageItem) {
-            oldItem.txtTitle == newItem.txtTitle
+            oldItem.imgThumbnail == newItem.imgThumbnail
         } else if (oldItem is SearchItem.VideoItem && newItem is SearchItem.VideoItem) {
-            oldItem.txtTitle == newItem.txtTitle
+            oldItem.imgThumbnail == newItem.imgThumbnail
         } else {
             oldItem == newItem
         }

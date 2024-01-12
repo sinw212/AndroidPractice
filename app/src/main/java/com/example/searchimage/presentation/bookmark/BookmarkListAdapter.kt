@@ -22,9 +22,9 @@ class BookmarkListAdapter(
             oldItem: BookmarkItem,
             newItem: BookmarkItem
         ): Boolean = if (oldItem is BookmarkItem.ImageItem && newItem is BookmarkItem.ImageItem) {
-            oldItem.txtTitle == newItem.txtTitle
+            oldItem.imgThumbnail == newItem.imgThumbnail
         } else if (oldItem is BookmarkItem.VideoItem && newItem is BookmarkItem.VideoItem) {
-            oldItem.txtTitle == newItem.txtTitle
+            oldItem.imgThumbnail == newItem.imgThumbnail
         } else {
             oldItem == newItem
         }

@@ -10,6 +10,9 @@ class BookmarkViewModel: ViewModel() {
     val bookmarkList: LiveData<List<BookmarkItem>>
         get() = _bookmarkList
 
+    /**
+     * '검색하기' 탭에서 북마크 설정 - 보관함 항목 추가
+     */
     fun addBookmarkItem(item: BookmarkItem?) {
         if(item == null) {
             return
@@ -19,6 +22,9 @@ class BookmarkViewModel: ViewModel() {
         _bookmarkList.value = currentList
     }
 
+    /**
+     * '검색하기' 탭에서 북마크 해제 - 보관함 항목 제거
+     */
     fun deleteBookmarkItem(item: BookmarkItem?) {
         if(item == null) {
             return
@@ -28,6 +34,9 @@ class BookmarkViewModel: ViewModel() {
         _bookmarkList.value = currentList
     }
 
+    /**
+     * '보관함' 탭에서 북마크 해제 - 보관함 항목 제거
+     */
     fun deleteBookmarkItem(position: Int?) {
         if(position == null || position < 0) {
             return

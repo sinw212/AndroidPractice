@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -47,9 +48,8 @@ class SearchFragment : Fragment() {
     }
 
     private fun initView() = with(binding) {
-        val staggeredGridLayoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         recyclerViewSearch.apply {
-            layoutManager = staggeredGridLayoutManager
+            layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
             adapter = searchListAdapter
         }
 
@@ -58,7 +58,9 @@ class SearchFragment : Fragment() {
             if (keyword.isBlank()) {
                 Toast.makeText(requireActivity(), R.string.search_edit_hint, Toast.LENGTH_SHORT).show()
             } else {
-                viewModel.searchKeywordInfo(edtSearch.text.toString())
+                viewModel.clearSearchList()
+                progressBar.visibility = View.VISIBLE
+                viewModel.searchKeywordInfo(keyword)
             }
         }
     }
@@ -67,6 +69,10 @@ class SearchFragment : Fragment() {
         with(viewModel) {
             searchList.observe(viewLifecycleOwner) {
                 searchListAdapter.submitList(it)
+            }
+
+            isLoading.observe(viewLifecycleOwner) { isLoading ->
+                binding.progressBar.isVisible = isLoading
             }
         }
 

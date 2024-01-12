@@ -21,12 +21,33 @@ class SearchViewModel(
     private val searchImage: GetSearchImageUseCase,
     private val searchVideo: GetSearchVideoUseCase
 ) : ViewModel() {
+    companion object {
+        const val TAG = "SearchViewModel"
+    }
 
     private val _searchList: MutableLiveData<List<SearchItem>> = MutableLiveData()
     val searchList: LiveData<List<SearchItem>>
         get() = _searchList
 
+    private val _isLoading: MutableLiveData<Boolean> = MutableLiveData()
+    val isLoading: LiveData<Boolean>
+        get() = _isLoading
+
+    /**
+     * 키워드가 이미 입력되어있는 경우, 다른 키워드 입력 후 검색 아이콘 클릭 시 list 비우기
+     */
+    fun clearSearchList() {
+        if(_searchList.value.isNullOrEmpty()) {
+            return
+        }
+        _searchList.value = emptyList()
+    }
+
+    /**
+     * API 통신하여 키워드 검색 결과 출력
+     */
     fun searchKeywordInfo(query: String) = viewModelScope.launch {
+        _isLoading.value = true
         runCatching {
             val items = createItems(
                 images = searchImage(
@@ -37,8 +58,10 @@ class SearchViewModel(
                 )
             )
             _searchList.postValue(items)
+            _isLoading.value = false
         }.onFailure {
-            Log.e("sinw", it.message.toString())
+            Log.e(TAG, it.message.toString())
+            _isLoading.value = false
         }
     }
 
@@ -81,6 +104,9 @@ class SearchViewModel(
         return items
     }
 
+    /**
+     * 북마크 아이콘 클릭 시, 북마크 상태 변경
+     */
     fun updateSearchItem(item: SearchItem?) {
         if (item == null) {
             return
