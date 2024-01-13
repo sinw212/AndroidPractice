@@ -6,7 +6,7 @@ MVVM 패턴을 학습하기 위해 간단한 TodoApp을 구현하였습니다.
 ## ⚙️ 프로젝트 구성
 - Stacks
 
-  `MVVM` `AAC ViewModel` `LiveData` `ListAdapter` `Coroutine` `Retrofit`
+  `MVVM` `AAC ViewModel` `LiveData` `ListAdapter`
 
 ## 📌 기능 설명
 - Todo에 대한 기본적인 CRUD 구현
