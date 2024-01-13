@@ -13,7 +13,7 @@ class HomeViewModel: ViewModel() {
 
     fun initSampleList() {
         val sampleDataList = arrayListOf<SampleData>()
-        for (i in 0..50) {
+        for (i in 0..35) {
             sampleDataList.add(SampleData("sample[$i]"))
         }
 
@@ -21,11 +21,9 @@ class HomeViewModel: ViewModel() {
         itemList.add(ListItemData.HEADER( ""))
         itemList.add(ListItemData.HEADER( ""))
         itemList.add(ListItemData.HEADER( ""))
-        itemList.add(ListItemData.HEADER( ""))
-        itemList.add(ListItemData.HEADER( ""))
         sampleDataList.forEachIndexed { index, sampleData ->
             if (index % 10 == 0) {
-                itemList.add(ListItemData.TOP_HOLDER(index))
+                itemList.add(ListItemData.TOP_HOLDER("Top_Holder Viewholder[$index]"))
             }
             itemList.add(ListItemData.ITEM(sampleData))
         }
