@@ -52,7 +52,6 @@ class MainActivity : AppCompatActivity() {
         val host: NavHostFragment = supportFragmentManager
                 .findFragmentById(R.id.my_nav_host_fragment) as NavHostFragment? ?: return
 
-        // Set up Action Bar
         val navController = host.navController
 
         appBarConfiguration = AppBarConfiguration(navController.graph)
@@ -74,7 +73,7 @@ class MainActivity : AppCompatActivity() {
             val dest: String = try {
                 resources.getResourceName(destination.id)
             } catch (e: Resources.NotFoundException) {
-                Integer.toString(destination.id)
+                destination.id.toString()
             }
 
             Toast.makeText(this@MainActivity, "Navigated to $dest",
@@ -119,13 +118,17 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return super.onOptionsItemSelected(item)
-        // Have Navigation UI Handle the item selection - make sure to delete the old return statement above
         // Have the NavigationUI look for an action or destination matching the menu
         // item id and navigate there if found.
         // Otherwise, bubble up to the parent.
-        return item.onNavDestinationSelected(findNavController(R.id.my_nav_host_fragment))
-                || super.onOptionsItemSelected(item)
+        return when (item.itemId) {
+            // overflow menu는 자동으로 NavController와 연결되지 않기 때문에 명시적으로 이동하는 코드 작성
+            R.id.settings_dest -> {
+                findNavController(R.id.my_nav_host_fragment).navigate(R.id.settings_dest)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     // Have NavigationUI handle up behavior in the ActionBar
