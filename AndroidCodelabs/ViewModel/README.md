@@ -1,29 +1,12 @@
-Unscramble App
-===================================
+# Android ViewModel codelab
 
-Starter code for Android Basics codelab - Store the data in a ViewModel
-
-Unscramble is  a single player game app that displays scrambled words. To play the game, player has
-to make a word using all the letters from the displayed scrambled word.
-
-Used in the [Android Basics with Kotlin](https://developer.android.com/courses/android-basics-kotlin/course) course.
+학습 내용 정리 : [Notion Link](https://scarce-seashore-b56.notion.site/ViewModel-1fcb5627055c4bc181d92e1707e64734?pvs=4)  
+Codelabs Link : [Store data in ViewModel](https://developer.android.com/codelabs/basic-android-kotlin-training-viewmodel?hl=ko&continue=https%3A%2F%2Fdeveloper.android.com%2Fcourses%2Fpathways%2Fandroid-development-with-kotlin-8%3Fhl%3Dko%23codelab-https%3A%2F%2Fdeveloper.android.com%2Fcodelabs%2Fbasic-android-kotlin-training-viewmodel), [Use LiveData with ViewModel](https://developer.android.com/codelabs/basic-android-kotlin-training-livedata?hl=ko&continue=https%3A%2F%2Fdeveloper.android.com%2Fcourses%2Fpathways%2Fandroid-development-with-kotlin-8%3Fhl%3Dko%23codelab-https%3A%2F%2Fdeveloper.android.com%2Fcodelabs%2Fbasic-android-kotlin-training-livedata)
 
 
-Pre-requisites
---------------
+### 구현 화면
+<img src="https://github.com/sinw212/KotlinPractice/assets/53486320/07a7f8d8-2c3c-4be9-8ff6-610b2c7f1a10" width="600" height="400"/>
 
-You need to know:
-- Knowledge about Fragments.
-- How to design a layout in ConstraintLayout.
-- Able to write control flow statements (if / else, when statements).
-- Able to update the UI of the app based on user input.
-- Able to add a click listener to a Button.
-
-
-Getting Started
----------------
-
-1. Download and run the app.
 
 License
 -------
@@ -37,11 +20,10 @@ file to you under the Apache License, Version 2.0 (the "License"); you may not
 use this file except in compliance with the License.  You may obtain a copy of
 the License at
 
-  http://www.apache.org/licenses/LICENSE-2.0
+http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
 WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the
 License for the specific language governing permissions and limitations under
 the License.
-
