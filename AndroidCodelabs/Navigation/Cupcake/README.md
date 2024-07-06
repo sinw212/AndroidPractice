@@ -1,5 +1,9 @@
-Cupcake app
+# Cupcake app
 =================================
+
+Codelabs Link : [Jetpack Compose Navigation practice](https://developer.android.com/codelabs/basic-android-kotlin-compose-navigation?continue=https%3A%2F%2Fdeveloper.android.com%2Fcourses%2Fpathways%2Fandroid-basics-compose-unit-4-pathway-2%23codelab-https%3A%2F%2Fdeveloper.android.com%2Fcodelabs%2Fbasic-android-kotlin-compose-navigation)    
+Get the Code : https://github.com/google-developer-training/basic-android-kotlin-compose-training-cupcake
+
 
 This app contains an order flow for cupcakes with options for quantity, flavor, and pickup date.
 The order details get displayed on an order summary screen and can be shared to another app to
