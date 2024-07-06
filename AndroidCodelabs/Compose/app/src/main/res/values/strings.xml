@@ -39,4 +39,16 @@
     <string name="tip_amount">Tip Amount: %s</string>
     <string name="how_was_the_service">Tip Percentage</string>
     <string name="round_up_tip">Round up tip?</string>
+
+    <string name="image1_title">모나리자</string>
+    <string name="image1_artist">레오나르도 다 빈치</string>
+    <string name="image1_year">1503</string>
+    <string name="image2_title">진주 귀고리를 한 소녀</string>
+    <string name="image2_artist">요하네스 페르메이르</string>
+    <string name="image2_year">1665</string>
+    <string name="image3_title">기타 치는 노인</string>
+    <string name="image3_artist">파블로 피카소</string>
+    <string name="image3_year">1903</string>
+    <string name="btn_previous">Previous</string>
+    <string name="btn_next">Next</string>
 </resources>
